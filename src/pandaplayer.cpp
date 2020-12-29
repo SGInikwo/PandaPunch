@@ -16,7 +16,7 @@ PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
     dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
-    mModel.loadModel("animatedPanda.dae", 20);
+    mModel.loadModel("pandaAnimation.dae", 20);
     double scale = .5/ mModel.getNormalizedScale();
 
     mModel.setScale(scale,scale*.5,scale);
