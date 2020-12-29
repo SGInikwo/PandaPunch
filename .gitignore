@@ -1,3 +1,8 @@
+# Ignore everything
 .DS_Store
 /bin/Debug_Desktop__ec512959c5133f7a/*
 *.o
+/bin
+
+# Don't ignore these
+!/bin/data
