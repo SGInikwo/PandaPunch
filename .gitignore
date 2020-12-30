@@ -2,7 +2,10 @@
 .DS_Store
 /bin/Debug_Desktop__ec512959c5133f7a/*
 *.o
+
 # Don't ignore these
 !/bin/
+# Igore
 /bin/*
+# Don't igone
 !/bin/data
