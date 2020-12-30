@@ -20,6 +20,10 @@ public:
     float getZ();
     void draw();
 
+    float x, y, z;
+    bool debugDraw = true;
+    const float c_len=1,c_wid=1,c_hei=0.1;
+
     /* ODE objects */
     dBodyID mBody;
     dMass   mMass;
@@ -27,15 +31,7 @@ public:
 
     /* The 3D model */
     ofxAssimpModelLoader mModel;
-
-    /* Attributes of this object */
-    float x, y, z;
     ofQuaternion mRotation;
-
-    bool debugDraw = true;
-
-    /* The length, width, height of the pallet */
-    const float c_len=1,c_wid=1,c_hei=0.1;
 };
 
 #endif // PANDAPLAYER_H

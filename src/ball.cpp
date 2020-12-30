@@ -1,5 +1,4 @@
 #include "ball.h"
-#include "ode/ode.h"
 
 Ball::Ball(float x, float y, float z, dWorldID w, dSpaceID s)
 {

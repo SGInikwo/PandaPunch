@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ode/ode.h"
 #include "pandaplayer.h"
+#include "ball.h"
 
 #include "ofxAssimpModelLoader.h"
 
@@ -25,8 +26,7 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-
-    ofEasyCam cam;
+    void collide (dGeomID o1, dGeomID o2);
 
     /* These variables are straight from demo_buggy.cpp */
     dWorldID world;
@@ -34,19 +34,15 @@ public:
     dJointGroupID contactgroup;
     dGeomID ground;
 
-    void collide (dGeomID o1, dGeomID o2);
-
-    /* A ground plane in graphics */
+    ofEasyCam cam;
     ofPlanePrimitive mGround;
-
-    /* A texture for it */
     ofTexture mGroundTex;
-
-    /* A light */
     ofLight light;
 
     /* A vector of pallets */
     PandaPlayer* panda;
+    Ball* ball;
+
 
 };
 

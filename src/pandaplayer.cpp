@@ -1,5 +1,4 @@
 #include "pandaplayer.h"
-#include "ode/ode.h"
 
 PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
 {
@@ -27,6 +26,18 @@ void PandaPlayer::setPosition(float x, float y, float z)
 {
     /* Setter method for position */
     this->x=x; this->y=y; this->z=z;
+}
+
+float PandaPlayer::getX(){
+    return x;
+}
+
+float PandaPlayer::getY(){
+    return y;
+}
+
+float PandaPlayer::getZ(){
+    return z;
 }
 
 /* Draw method collects latest data from ODE and draws the model at

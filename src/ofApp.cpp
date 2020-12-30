@@ -24,14 +24,10 @@ void ofApp::setup(){
     dAllocateODEDataForThread(dAllocateMaskAll);
 
     /* Graphics ground plane */
-    mGround.set(8,8);              // 8x8 plane
-    mGround.mapTexCoords(0,0,4,4); // Texture tiles every 2 units
-    mGround.setResolution(128,128);    // How many triangles to divide the plane into.
-                                    // Note that this affects lighting quality.
+    mGround.set(8,8);
+    mGround.mapTexCoords(0,0,4,4);
+    mGround.setResolution(128,128);
 
-    /* The texture is saved in the bin/data directory.
-     * It was found by searching "tiling dirt texture" ...
-     */
     if(!ofLoadImage(mGroundTex, "dirt2.jpg")) { std::cerr << "Failed to load ground texture." << std::endl; }
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
