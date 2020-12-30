@@ -56,13 +56,13 @@ void PandaPlayer::draw()
         ofPushMatrix();
 
         /* Translate to the correct position: */
-        ofTranslate(x,y,z);
+        ofTranslate(x,y,z+.5);
 
         /* Rotate by the correct amount: */
         ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
 
         /* Draw the box */
-        ofDrawBox(1,1,0.1);
+        ofDrawBox(1,1,1.1);
 
         /* Restore the graphics transform stack: */
         ofPopMatrix();

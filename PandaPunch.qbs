@@ -12,6 +12,8 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "src/ball.cpp",
+            "src/ball.h",
             "src/pandaplayer.cpp",
             "src/pandaplayer.h",
             'src/main.cpp',

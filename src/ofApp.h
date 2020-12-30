@@ -46,7 +46,7 @@ public:
     ofLight light;
 
     /* A vector of pallets */
-    std::vector<PandaPlayer*> panda;
+    PandaPlayer* panda;
 
 };
 

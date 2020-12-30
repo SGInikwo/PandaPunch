@@ -40,10 +40,7 @@ void ofApp::setup(){
     light.lookAt(glm::vec3(0,0,0));
     light.enable();
 
-    /* Create some PalletObjects */
-    for(unsigned int p=0; p<1; p++) {
-        panda.push_back(new PandaPlayer(ofRandom(-5,5), ofRandom(-5,5), ofRandom(0,10), world, space) );
-    }
+    panda = new PandaPlayer(ofRandom(-5,5), ofRandom(-5,5), ofRandom(0,10), world, space);
 }
 
 //--------------------------------------------------------------
@@ -74,7 +71,7 @@ void ofApp::draw(){
     ofDrawAxis(10);
 
     /* Draw the pallets */
-    for(auto x: panda ) x->draw();
+    panda->draw();
 
     ofDisableDepthTest();
     cam.end();
