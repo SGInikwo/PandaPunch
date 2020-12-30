@@ -3,5 +3,6 @@
 /bin/Debug_Desktop__ec512959c5133f7a/*
 *.o
 # Don't ignore these
-!/bin/data
+!/bin/
 /bin/*
+!/bin/data
