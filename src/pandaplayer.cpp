@@ -38,7 +38,6 @@ void PandaPlayer::draw()
     const dReal* thePos = dBodyGetPosition(mBody);
     const dReal* oderot = dBodyGetQuaternion(mBody);
 
-    /* Set the position (of this PalletObject object) */
     setPosition(thePos[0],thePos[1], thePos[2]);
 
     /* Get ODEs rotation quaternion, convert it to an OF one,
@@ -52,35 +51,26 @@ void PandaPlayer::draw()
      * make sure that our model is being drawn approximately correctly */
     if(debugDraw) {
         ofSetColor(ofColor::white,128);
-        /* Save the current state of the graphics transform stack: */
         ofPushMatrix();
 
-        /* Translate to the correct position: */
         ofTranslate(x,y,z+.5);
 
-        /* Rotate by the correct amount: */
-        ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
+        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
 
         /* Draw the box */
         ofDrawBox(1,1,1.1);
 
-        /* Restore the graphics transform stack: */
         ofPopMatrix();
     }
     /* Draw the model */
-    /* Save the current state of the graphics transform stack: */
     ofPushMatrix();
 
-    /* Translate to the correct position: */
     ofTranslate(x,y,z);
 
-    /* Rotate by the correct amount: */
-    ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
+    //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
    //model.setPosition(pos_ode[0], pos_ode[1], pos_ode[2]);
 
-    /* Draw the model: */
     mModel.drawFaces();
 
-    /* Restore the transformation matrix: */
     ofPopMatrix();
 }

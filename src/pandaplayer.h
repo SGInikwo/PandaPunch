@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
 #include "ofxAssimpAnimation.h"
+#include "ball.h"
 
 #ifndef PANDAPLAYER_H
 #define PANDAPLAYER_H
@@ -12,6 +13,12 @@ class PandaPlayer
 {
 public:
     PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s);
+
+    void setPosition(float x, float y, float z);
+    float getX();
+    float getY();
+    float getZ();
+    void draw();
 
     /* ODE objects */
     dBodyID mBody;
@@ -24,9 +31,6 @@ public:
     /* Attributes of this object */
     float x, y, z;
     ofQuaternion mRotation;
-
-    void setPosition(float x, float y, float z);
-    void draw();
 
     bool debugDraw = true;
 
