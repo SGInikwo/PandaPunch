@@ -190,7 +190,7 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){0
+void ofApp::keyReleased(int key){
 }
 
 //--------------------------------------------------------------
