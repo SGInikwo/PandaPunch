@@ -34,7 +34,7 @@ public:
     dJointGroupID contactgroup;
     dGeomID ground;
 
-    ofEasyCam cam;
+    ofEasyCam camera;
     ofPlanePrimitive mGround;
     ofTexture mGroundTex;
     ofLight light;
@@ -42,6 +42,8 @@ public:
     /* A vector of pallets */
     PandaPlayer* panda;
     Ball* ball;
+
+    bool left=false,right=false,up=false,down=false;
 
 
 };

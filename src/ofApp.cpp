@@ -1,8 +1,10 @@
 #include "ofApp.h"
 
+static const dVector3 yunit = { 0, 1, 0 }, zunit = { 0, 0, 1 };
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofDisableArbTex();
+    ofSetFrameRate(60);
 
     // create world
     dInitODE2(0);
@@ -11,15 +13,6 @@ void ofApp::setup(){
     contactgroup = dJointGroupCreate (0);
     dWorldSetGravity (world,0,0,-0.5);
     ground = dCreatePlane (space,0,0,1,0);
-
-    // Set up the OpenFrameworks camera
-    ofVec3f upVector;
-    upVector.set(0, 0, 1);
-    cam.setAutoDistance(false);
-    cam.setNearClip(0.01);
-    cam.setPosition(10,10,10);
-    cam.lookAt({0,0,0},upVector);
-    cam.setUpAxis(upVector);
 
     dAllocateODEDataForThread(dAllocateMaskAll);
 
@@ -32,17 +25,52 @@ void ofApp::setup(){
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
     /* The light */
-    light.setPosition(8,8,5);
+    light.setPosition(-8,0,32);
     light.lookAt(glm::vec3(0,0,0));
     light.enable();
 
-    panda = new PandaPlayer(ofRandom(-5,5), ofRandom(-5,5), ofRandom(0,10), world, space);
+    /* The light */
+    light.setPosition(8,0,32);
+    light.lookAt(glm::vec3(0,0,0));
+    light.enable();
+
+    /* The light */
+    light.setPosition(0,8,32);
+    light.lookAt(glm::vec3(0,0,0));
+    light.enable();
+
+    /* The light */
+    light.setPosition(0,-8,32);
+    light.lookAt(glm::vec3(0,0,0));
+    light.enable();
+
+    panda = new PandaPlayer(0,0,0, world, space);
+    //ball = new Ball(panda->getX()-(.745),panda->getY()-(.4),panda->getZ()+1.2,world,space);
+
+    // Set up the OpenFrameworks camera
+//    ofVec3f upVector;
+//    upVector.set(0, 0, 1);
+//    camera.setAutoDistance(false);
+//    camera.setNearClip(0.01);
+//    camera.setPosition(panda->getX(),panda->getY()+5,panda->getZ()+4);
+//    camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
+//    camera.setUpAxis(upVector);
+
+    ofVec3f upVector;
+    upVector.set(0, 0, 1);
+    camera.setAutoDistance(false);
+    camera.setNearClip(0.01);
+    camera.setPosition(10,10,10);
+    camera.lookAt({0,0,0},upVector);
+    camera.setUpAxis(upVector);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    panda->update();
+    //camera.setPosition(panda->getX(),panda->getY()+5,panda->getZ()+4);
     dSpaceCollide (space,0,&nearCallback);
-    dWorldStep (world,0.05);
+    dWorldStep (world,0.005);
 
     // remove all contact joints
     dJointGroupEmpty (contactgroup);
@@ -52,7 +80,8 @@ void ofApp::update(){
 void ofApp::draw(){
     // draw the scene
     ofBackground(20);
-    cam.begin();
+    //camera.
+    camera.begin();
 
     ofEnableDepthTest();
 
@@ -68,9 +97,10 @@ void ofApp::draw(){
 
     /* Draw the pallets */
     panda->draw();
+    //ball->draw();
 
     ofDisableDepthTest();
-    cam.end();
+    camera.end();
 
     ofPopMatrix();
 }
@@ -120,12 +150,47 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    switch(key) {
 
+    case OF_KEY_UP:
+        up=true;
+        if(up){
+            panda->setY(0.03);
+        }
+        std::cout << "UP" << std::endl;
+        break;
+    case OF_KEY_DOWN:
+        down=true;
+        if(down){
+            panda->setY(-0.03);
+        }
+        std::cout << "DOWN" << std::endl;
+        break;
+    case OF_KEY_LEFT:
+        left=true;
+        if(left){
+            panda->setRotX(-1);
+        }
+        std::cout << "LEFT" << std::endl;
+        break;
+    case OF_KEY_RIGHT:
+        right=true;
+        if(right){
+            panda->setRotX(-1);
+        }
+        std::cout << "RIGHT" << std::endl;
+        break;
+    case ' ':
+        panda->setY(0);
+        break;
+    case 'q':
+        ofExit();
+        break;
+    }
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
+void ofApp::keyReleased(int key){0
 }
 
 //--------------------------------------------------------------

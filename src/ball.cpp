@@ -8,14 +8,14 @@ Ball::Ball(float x, float y, float z, dWorldID w, dSpaceID s)
     /* Set up physics objects */
     mBody = dBodyCreate(w);
     dBodySetPosition(mBody, x, y, z);
-    dMassSetBox (&mMass,1,c_len,c_wid,c_hei);
-    dMassAdjust (&mMass,1);
-    dBodySetMass (mBody,&mMass);
-    mGeom = dCreateBox(s, c_len,c_wid,c_hei);
+    //dMassSetBox (&mMass,0.01,c_len,c_wid,c_hei);
+    //dMassAdjust (&mMass,0.01);
+    //dBodySetMass (mBody,&mMass);
+    mGeom = dCreateCylinder(s,c_wid,c_len);
     dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
-    mModel.loadModel("pandaAnimation.dae", 20);
+    mModel.loadModel("ball.dae", 20);
     double scale = .5/ mModel.getNormalizedScale();
 
     mModel.setScale(scale,scale*.5,scale);
