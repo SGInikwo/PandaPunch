@@ -65,7 +65,7 @@ void PandaPlayer::update(){
     dBodySetPosition(mBody, x, y, z);
 }
 
-void PandaPlayer::setRotX (float pAngle){
+void PandaPlayer::setRotY (float pAngle){
     this->pAngle += pAngle;
 }
 

@@ -15,7 +15,7 @@ public:
     PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s);
 
     void setPosition(float x, float y, float z);
-    void setRotX (float pAngle);
+    void setRotY (float pAngle);
     void setSpeed(float speed);
     //void setY(float speed);
     void setZ(float z);

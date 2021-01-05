@@ -45,17 +45,25 @@ void ofApp::setup(){
     light.enable();
 
     panda = new PandaPlayer(0,0,0, world, space);
-    //ball = new Ball(panda->getX()-(.745),panda->getY()-(.4),panda->getZ()+1.2,world,space);
+
 
     // Set up the OpenFrameworks camera
     //camera.setAutoDistance(true);
-    ofVec3f upVector;
-    upVector.set(0, 1, 0);
-    camera.setNearClip(0.01);
-    camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
-    camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
-    camera.setTarget(panda->mModel.getPosition());
+//    ofVec3f upVector;
+//    upVector.set(0, 1, 0);
+//    camera.setNearClip(0.01);
+//    camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
+//    camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
+//    camera.setTarget(panda->mModel.getPosition());
     //camera.setUpAxis(upVector);
+
+    ofVec3f upVector;
+    upVector.set(0, 0, 1);
+    camera.setAutoDistance(false);
+    camera.setNearClip(0.01);
+    camera.setPosition(0,-4,6);
+    camera.lookAt({0,0,0},upVector);
+    camera.setUpAxis(upVector);
 
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
 }
@@ -64,13 +72,29 @@ void ofApp::setup(){
 void ofApp::update(){
 
     /* Handle the keys: */
-    if (keys[OF_KEY_LEFT]) panda->setRotX(3);
-    if (keys[OF_KEY_RIGHT]) panda->setRotX(-3);
+    if (keys[OF_KEY_LEFT]){
+        panda->setRotY(3);
+
+    }
+    if (keys[OF_KEY_RIGHT]){
+
+        panda->setRotY(-3);
+
+    }
     if (keys[OF_KEY_UP]){ panda->setSpeed(0.025); panda->mModel.playAllAnimations(); panda->mModel.update();}
     if (keys[OF_KEY_DOWN]){ panda->setSpeed(-0.025); panda->mModel.playAllAnimations(); panda->mModel.update();}
 
     panda->update();
-    camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
+    if(fireBall == true) {
+        if(fireon == true){
+            ball->setRotY(panda->pAngle);
+            fireon = false;
+        }
+        ball->setSpeed(0.25);
+        ball->update();
+
+    }
+    //camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
 
     dSpaceCollide (space,0,&nearCallback);
     dWorldStep (world,5);
@@ -100,7 +124,7 @@ void ofApp::draw(){
 
     /* Draw the pallets */
     panda->draw();
-    //ball->draw();
+    if(seeBall) ball->draw();
 
     ofDisableDepthTest();
     camera.end();
@@ -154,6 +178,12 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 void ofApp::keyPressed(int key){
     keys[key] = 1;
     switch(key) {
+    case 'r':
+        ball = new Ball(panda->getX()+.78,panda->getY()+(.25),panda->getZ()+.6,world,space);
+        seeBall = true;
+        fireBall = true;
+        fireon =true;
+        break;
     case 'q':
         ofExit();
         break;

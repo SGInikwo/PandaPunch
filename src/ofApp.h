@@ -46,7 +46,11 @@ public:
     PandaPlayer* panda;
     Ball* ball;
 
-    bool left=false,right=false,up=false,down=false;
+    bool seeBall = false;
+    bool fireBall = false;
+    bool fireon = true;
+
+    float angle;
 
 
 };

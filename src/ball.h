@@ -14,6 +14,9 @@ public:
     Ball(float x, float y, float z, dWorldID w, dSpaceID s);
 
     void setPosition(float x, float y, float z);
+    void setRotY (float pAngle);
+    void setSpeed(float speed);
+    void update();
     void draw();
 
     float x, y, z;
@@ -25,6 +28,10 @@ public:
     dBodyID mBody;
     dMass   mMass;
     dGeomID mGeom;
+
+    float speed;
+
+    dReal pAngle = 0;
 
     /* The 3D model */
     ofxAssimpModelLoader mModel;
