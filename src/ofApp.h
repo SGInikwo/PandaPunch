@@ -28,6 +28,8 @@ public:
     void gotMessage(ofMessage msg);
     void collide (dGeomID o1, dGeomID o2);
 
+    unsigned int keys[65536];
+
     /* These variables are straight from demo_buggy.cpp */
     dWorldID world;
     dSpaceID space;
@@ -35,6 +37,7 @@ public:
     dGeomID ground;
 
     ofEasyCam camera;
+    ofCamera cam;
     ofPlanePrimitive mGround;
     ofTexture mGroundTex;
     ofLight light;

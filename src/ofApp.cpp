@@ -48,29 +48,32 @@ void ofApp::setup(){
     //ball = new Ball(panda->getX()-(.745),panda->getY()-(.4),panda->getZ()+1.2,world,space);
 
     // Set up the OpenFrameworks camera
-//    ofVec3f upVector;
-//    upVector.set(0, 0, 1);
-//    camera.setAutoDistance(false);
-//    camera.setNearClip(0.01);
-//    camera.setPosition(panda->getX(),panda->getY()+5,panda->getZ()+4);
-//    camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
-//    camera.setUpAxis(upVector);
-
+    //camera.setAutoDistance(true);
     ofVec3f upVector;
-    upVector.set(0, 0, 1);
-    camera.setAutoDistance(false);
+    upVector.set(0, 1, 0);
     camera.setNearClip(0.01);
-    camera.setPosition(10,10,10);
-    camera.lookAt({0,0,0},upVector);
-    camera.setUpAxis(upVector);
+    camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
+    camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
+    camera.setTarget(panda->mModel.getPosition());
+    //camera.setUpAxis(upVector);
+
+    for(unsigned int i=0; i<65536; i++) keys[i] = 0;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+    /* Handle the keys: */
+    if (keys[OF_KEY_LEFT]) panda->setRotX(3);
+    if (keys[OF_KEY_RIGHT]) panda->setRotX(-3);
+    if (keys[OF_KEY_UP]){ panda->setSpeed(0.025); panda->mModel.playAllAnimations(); panda->mModel.update();}
+    if (keys[OF_KEY_DOWN]){ panda->setSpeed(-0.025); panda->mModel.playAllAnimations(); panda->mModel.update();}
+
     panda->update();
-    //camera.setPosition(panda->getX(),panda->getY()+5,panda->getZ()+4);
+    camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
+
     dSpaceCollide (space,0,&nearCallback);
-    dWorldStep (world,0.005);
+    dWorldStep (world,5);
 
     // remove all contact joints
     dJointGroupEmpty (contactgroup);
@@ -80,7 +83,7 @@ void ofApp::update(){
 void ofApp::draw(){
     // draw the scene
     ofBackground(20);
-    //camera.
+
     camera.begin();
 
     ofEnableDepthTest();
@@ -124,7 +127,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
   int i,n;
 
   // only collide things with the ground
-  int g1 = (o1 == ground);
+  //int g1 = (o1 == ground);
   int g2 = (o2 == ground );
   //if (!(g1 ^ g2)) return;
 
@@ -147,42 +150,10 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
     }
   }
 }
-
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    keys[key] = 1;
     switch(key) {
-
-    case OF_KEY_UP:
-        up=true;
-        if(up){
-            panda->setY(0.03);
-        }
-        std::cout << "UP" << std::endl;
-        break;
-    case OF_KEY_DOWN:
-        down=true;
-        if(down){
-            panda->setY(-0.03);
-        }
-        std::cout << "DOWN" << std::endl;
-        break;
-    case OF_KEY_LEFT:
-        left=true;
-        if(left){
-            panda->setRotX(-1);
-        }
-        std::cout << "LEFT" << std::endl;
-        break;
-    case OF_KEY_RIGHT:
-        right=true;
-        if(right){
-            panda->setRotX(-1);
-        }
-        std::cout << "RIGHT" << std::endl;
-        break;
-    case ' ':
-        panda->setY(0);
-        break;
     case 'q':
         ofExit();
         break;
@@ -191,6 +162,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+    keys[key] = 0;
 }
 
 //--------------------------------------------------------------
