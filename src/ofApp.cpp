@@ -17,12 +17,14 @@ void ofApp::setup(){
     dAllocateODEDataForThread(dAllocateMaskAll);
 
     /* Graphics ground plane */
-    mGround.set(8,8);
-    mGround.mapTexCoords(0,0,4,4);
+    mGround.set(64,128);
+    mGround.mapTexCoords(0,0,8,8);
     mGround.setResolution(128,128);
 
-    if(!ofLoadImage(mGroundTex, "dirt2.jpg")) { std::cerr << "Failed to load ground texture." << std::endl; }
+    if(!ofLoadImage(mGroundTex, "unnamed.png")) { std::cerr << "Failed to load ground texture." << std::endl; }
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
+
+    panda = new PandaPlayer(0,-50,0, world, space);
 
     /* The light */
     light.setPosition(-8,0,32);
@@ -40,12 +42,9 @@ void ofApp::setup(){
     light.enable();
 
     /* The light */
-    light.setPosition(0,-8,32);
-    light.lookAt(glm::vec3(0,0,0));
+    light.setPosition(0,-55,32);
+    light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
     light.enable();
-
-    panda = new PandaPlayer(0,0,0, world, space);
-
 
     // Set up the OpenFrameworks camera
     //camera.setAutoDistance(true);
@@ -61,28 +60,27 @@ void ofApp::setup(){
     upVector.set(0, 0, 1);
     camera.setAutoDistance(false);
     camera.setNearClip(0.01);
-    camera.setPosition(0,-4,6);
-    camera.lookAt({0,0,0},upVector);
+    camera.setPosition(0,-55,4);
+    camera.lookAt({panda->getX(),panda->getY()+10,panda->getZ()},upVector);
     camera.setUpAxis(upVector);
 
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
+    bgImage.loadImage("thunderstorm-3625405_1920.jpg");
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    //float lastTime;
+    //float currentTime = ofGetElapsedTimef();
     /* Handle the keys: */
-    if (keys[OF_KEY_LEFT]){
+    if (keys[OF_KEY_LEFT] || keys['a']){
         panda->setRotY(3);
-
     }
-    if (keys[OF_KEY_RIGHT]){
-
+    if (keys[OF_KEY_RIGHT] || keys['d']){
         panda->setRotY(-3);
-
     }
-    if (keys[OF_KEY_UP]){ panda->setSpeed(0.025); panda->mModel.playAllAnimations(); panda->mModel.update();}
-    if (keys[OF_KEY_DOWN]){ panda->setSpeed(-0.025); panda->mModel.playAllAnimations(); panda->mModel.update();}
+    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
+    //if (keys[OF_KEY_DOWN] || keys['s']){ panda->setSpeed(-0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
 
     panda->update();
     if(fireBall == true) {
@@ -93,9 +91,15 @@ void ofApp::update(){
         ball->setSpeed(0.25);
         ball->update();
 
+        if(((ball->y-panda->getY()) > 2) || ((ball->y-panda->getY()) < -2) || ((ball->x-panda->getX()) >2) || ((ball->x-panda->getX()) < -2) ){
+            ball->x = panda->getX();
+            ball->y = panda->getY();
+            fireBall = false;
+        }
     }
-    //camera.setPosition(panda->getX(),panda->getY()-4,panda->getZ()+2);
+    //camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
 
+    light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
     dSpaceCollide (space,0,&nearCallback);
     dWorldStep (world,5);
 
@@ -106,7 +110,8 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     // draw the scene
-    ofBackground(20);
+    //ofBackground(20);
+    bgImage.draw(0,0);
 
     camera.begin();
 
@@ -120,7 +125,7 @@ void ofApp::draw(){
     mGround.draw();
     mGroundTex.unbind();
 
-    ofDrawAxis(10);
+    //ofDrawAxis(10);
 
     /* Draw the pallets */
     panda->draw();
@@ -174,12 +179,14 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
     }
   }
 }
+
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     keys[key] = 1;
     switch(key) {
     case 'r':
         ball = new Ball(panda->getX()+.78,panda->getY()+(.25),panda->getZ()+.6,world,space);
+        ball->setRotY(panda->pAngle);
         seeBall = true;
         fireBall = true;
         fireon =true;

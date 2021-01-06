@@ -41,6 +41,7 @@ public:
     ofPlanePrimitive mGround;
     ofTexture mGroundTex;
     ofLight light;
+    ofImage bgImage;
 
     /* A vector of pallets */
     PandaPlayer* panda;

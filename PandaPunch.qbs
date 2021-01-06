@@ -16,9 +16,9 @@ Project{
             "src/ball.h",
             "src/pandaplayer.cpp",
             "src/pandaplayer.h",
-            'src/main.cpp',
-            'src/ofApp.cpp',
-            'src/ofApp.h',
+            "src/main.cpp",
+            "src/ofApp.cpp",
+            "src/ofApp.h",
         ]
 
         of.addons: [
