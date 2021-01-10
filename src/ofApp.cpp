@@ -14,6 +14,10 @@ void ofApp::setup(){
     dWorldSetGravity (world,0,0,-0.5);
     ground = dCreatePlane (space,0,0,1,0);
 
+    // environment
+        ground_box = dCreateBox (space,2,1.5,2);
+        dGeomSetPosition (ground_box,0,0,1.5);
+
     dAllocateODEDataForThread(dAllocateMaskAll);
 
     /* Graphics ground plane */
@@ -24,7 +28,7 @@ void ofApp::setup(){
     if(!ofLoadImage(mGroundTex, "unnamed.png")) { std::cerr << "Failed to load ground texture." << std::endl; }
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    panda = new PandaPlayer(0,-50,0, world, space);
+    panda = new PandaPlayer(0,-50,6, world, space);
 
     /* The light */
     light.setPosition(-8,0,32);
@@ -79,29 +83,31 @@ void ofApp::update(){
     if (keys[OF_KEY_RIGHT] || keys['d']){
         panda->setRotY(-3);
     }
-    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
+    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.145); panda->mModel.playAllAnimations();
+        //panda->mModel.update();
+    }
     //if (keys[OF_KEY_DOWN] || keys['s']){ panda->setSpeed(-0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
 
-    panda->update();
-    if(fireBall == true) {
-        if(fireon == true){
-            ball->setRotY(panda->pAngle);
-            fireon = false;
-        }
-        ball->setSpeed(0.25);
-        ball->update();
+//    panda->update();
+//    if(fireBall == true) {
+//        if(fireon == true){
+//            ball->setRotY(panda->pAngle);
+//            fireon = false;
+//        }
+//        ball->setSpeed(0.25);
+//        //ball->update();
 
-        if(((ball->y-panda->getY()) > 2) || ((ball->y-panda->getY()) < -2) || ((ball->x-panda->getX()) >2) || ((ball->x-panda->getX()) < -2) ){
-            ball->x = panda->getX();
-            ball->y = panda->getY();
-            fireBall = false;
-        }
-    }
+//        if(((ball->y-panda->getY()) > 2) || ((ball->y-panda->getY()) < -2) || ((ball->x-panda->getX()) >2) || ((ball->x-panda->getX()) < -2) ){
+//            ball->x = panda->getX();
+//            ball->y = panda->getY();
+//            fireBall = false;
+//        }
+//    }
     //camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
 
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
     dSpaceCollide (space,0,&nearCallback);
-    dWorldStep (world,5);
+    dWorldStep (world,0.05);
 
     // remove all contact joints
     dJointGroupEmpty (contactgroup);
@@ -127,6 +133,13 @@ void ofApp::draw(){
 
     //ofDrawAxis(10);
 
+    // ground box
+        ofSetColor(ofColor::blue);
+        dVector3 ss; dQuaternion r;
+        dGeomBoxGetLengths (ground_box,ss);
+        dGeomGetQuaternion(ground_box,r);
+        drawBox(dGeomGetPosition(ground_box),r,ss);
+
     /* Draw the pallets */
     panda->draw();
     if(seeBall) ball->draw();
@@ -150,6 +163,27 @@ static void nearCallback (void *, dGeomID o1, dGeomID o2) {
     myApp->collide(o1,o2);
 }
 
+void ofApp::drawBox(const dReal*pos_ode, const dQuaternion rot_ode, const dReal*sides_ode)
+{
+    ofBoxPrimitive b;
+    // ofBox dimensions: 100 * 100 * 100
+    // std::cout << b.getSize() << std::endl;
+
+    // scale it to be unit w, h, d * the actual size:
+    b.setScale(glm::vec3(0.01*sides_ode[0],0.01*sides_ode[1],0.01*sides_ode[2]));
+
+    // Simply set the orientation based on ODE's quaternion. Since we are using glm::quat
+    // this time, the ordering is the same as ODE:
+    b.setGlobalOrientation(glm::quat(rot_ode[0],rot_ode[1],rot_ode[2],rot_ode[3]));
+
+    // Now set the box's position according to ODE physics:
+    b.setGlobalPosition(glm::vec3(pos_ode[0],pos_ode[1],pos_ode[2]));
+
+    // Draw it:
+    b.draw();
+
+}
+
 //--------------------------------------------------------------
 void ofApp::collide(dGeomID o1, dGeomID o2)
 {
@@ -157,7 +191,15 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 
   // only collide things with the ground
   //int g1 = (o1 == ground);
-  int g2 = (o2 == ground );
+  //int g2 = (o2 == ground );
+
+  if(ground == o1){
+      std::cout<< "hiiiiiii  02" << std::endl;
+  }else if(ground == o1){
+      std::cout << "hi 01" << std::endl;
+  }
+  int g1 = (o1 == ground || o1 == ground_box);
+  int g2 = (o2 == ground || o2 == ground_box);
   //if (!(g1 ^ g2)) return;
 
   const int N = 10;

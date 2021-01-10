@@ -17,31 +17,22 @@ public:
     void setPosition(float x, float y, float z);
     void setRotY (float pAngle);
     void setSpeed(float speed);
-    //void setY(float speed);
     void setZ(float z);
-    void update();
+    //void update();
     void draw();
     float getRotX ();
     float getX();
     float getY();
     float getZ();
 
-    float rotationAmount;
 
-    const float c_len=1,c_wid=1,c_hei=0.01;
+    const float c_len=2,c_wid=2,c_hei=2;
     bool debugDraw = true;
     float x, y, z;
-    float d[4];
     float speed;
 
-    const dReal* oderot;
-    const dReal* odeRot;
     dReal pAngle = 0;
     dReal pElevation = 0;
-
-
-    ofBoxPrimitive geometry;
-    ofMaterial material;
 
 
     /* ODE objects */
@@ -51,9 +42,6 @@ public:
 
     /* The 3D model */
     ofxAssimpModelLoader mModel;
-    ofQuaternion mRotation;
-    ofQuaternion rRotation;
-    ofVec3f rotationAngle;
 
 };
 

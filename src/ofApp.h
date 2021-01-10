@@ -28,6 +28,8 @@ public:
     void gotMessage(ofMessage msg);
     void collide (dGeomID o1, dGeomID o2);
 
+    void drawBox(const dReal*pos_ode, const dQuaternion rot_ode, const dReal*sides_ode);
+
     unsigned int keys[65536];
 
     /* These variables are straight from demo_buggy.cpp */
@@ -42,6 +44,8 @@ public:
     ofTexture mGroundTex;
     ofLight light;
     ofImage bgImage;
+
+    dGeomID ground_box;
 
     /* A vector of pallets */
     PandaPlayer* panda;
