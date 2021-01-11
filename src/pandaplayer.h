@@ -18,31 +18,29 @@ public:
     void setRotY (float pAngle);
     void setSpeed(float speed);
     void setZ(float z);
-    //void update();
     void draw();
+
     float getRotX ();
     float getX();
     float getY();
     float getZ();
 
-
-    const float c_len=2,c_wid=2,c_hei=2;
-    bool debugDraw = true;
+    const float c_len=1.85,c_wid=1.2,c_hei=1;
     float x, y, z;
     float speed;
+
+    bool debugDraw = true;
 
     dReal pAngle = 0;
     dReal pElevation = 0;
 
-
     /* ODE objects */
     dBodyID mBody;
-    dMass   mMass;
     dGeomID mGeom;
+    dMass   mMass;
 
     /* The 3D model */
     ofxAssimpModelLoader mModel;
-
 };
 
 #endif // PANDAPLAYER_H

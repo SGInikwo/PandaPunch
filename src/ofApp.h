@@ -54,10 +54,6 @@ public:
     bool seeBall = false;
     bool fireBall = false;
     bool fireon = true;
-
-    float angle;
-
-
 };
 
 static void nearCallback (void *, dGeomID o1, dGeomID o2);

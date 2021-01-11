@@ -15,7 +15,7 @@ PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
     dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
-    mModel.loadModel("panda.dae", true);
+    mModel.loadModel("panda.dae", 20);
     double scale = .5/ mModel.getNormalizedScale();
 
     mModel.setScale(scale,scale*.5,scale);
@@ -36,10 +36,11 @@ void PandaPlayer::setPosition(float x, float y, float z)
 void PandaPlayer::setSpeed(float speed){
     x += sin(pAngle*0.0174532925) * -speed;
     y += cos(pAngle*0.0174532925) * speed;
+
     dBodySetPosition(mBody, x, y, z);
 
     const dReal* thePos = dBodyGetPosition(mBody);
-    const dReal* oderot = dBodyGetQuaternion(mBody);
+
 
     setPosition(thePos[0],thePos[1], thePos[2]);
 
@@ -63,8 +64,6 @@ float PandaPlayer::getZ(){
     return z;
 }
 
-
-
 void PandaPlayer::setRotY (float pAngle){
     this->pAngle += pAngle;
 }
@@ -75,21 +74,44 @@ float PandaPlayer::getRotX (){
 
 void PandaPlayer::draw(){
     const dReal* thePos = dBodyGetPosition(mBody);
-    const dReal* oderot = dBodyGetQuaternion(mBody);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
 
+    if(!debugDraw) {
+        dVector3 ss; dQuaternion r;
+            dGeomBoxGetLengths (mGeom,ss);
+            dGeomGetQuaternion(mGeom,r);
+            const dReal* f = dGeomGetPosition(mGeom);
+
+        ofSetColor(ofColor::white,128);
+        /* Save the current state of the graphics transform stack: */
+        ofPushMatrix();
+
+        /* Translate to the correct position: */
+        ofTranslate(f[0],f[1],f[2]);
+
+        cout << " f X "<< f[0]<< " f Y " << f[1] << " f Z " << f[2] << endl;
+
+        /* Rotate by the correct amount: */
+        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
+
+        /* Draw the box */
+        ofDrawBox(ss[0],ss[1],ss[2]);
+
+        /* Restore the graphics transform stack: */
+        ofPopMatrix();
+        }
+
     ofPushMatrix();
 
-    mModel.setPosition(x,y,z-1);
+    mModel.setPosition(x,y,z-.5);
     //dBodySetPosition(mBody, x, y, z);
-    dGeomSetBody (mGeom, mBody);
+    //dGeomSetBody (mGeom, mBody);
     mModel.setRotation(1,pAngle,0,1,0);
 
     mModel.drawFaces();
 
     ofPopMatrix();
-
 }
 
 

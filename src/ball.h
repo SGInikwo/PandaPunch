@@ -21,8 +21,8 @@ public:
 
     float x, y, z;
     //float offX=0.745,offY=0.4,offZ=1.2;
-    bool debugDraw = false;
-    const float c_len=1.2,c_wid=1,c_hei=0.7;
+    bool debugDraw = true;
+    const float c_rad=.085;;
 
     /* ODE objects */
     dBodyID mBody;
@@ -36,8 +36,6 @@ public:
     /* The 3D model */
     ofxAssimpModelLoader mModel;
     ofQuaternion mRotation;
-
-
 };
 
 #endif // BALL_H

@@ -4,7 +4,8 @@ static const dVector3 yunit = { 0, 1, 0 }, zunit = { 0, 0, 1 };
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofDisableArbTex();
-    ofSetFrameRate(60);
+
+    //ofSetFrameRate(60);
 
     // create world
     dInitODE2(0);
@@ -15,8 +16,8 @@ void ofApp::setup(){
     ground = dCreatePlane (space,0,0,1,0);
 
     // environment
-        ground_box = dCreateBox (space,2,1.5,2);
-        dGeomSetPosition (ground_box,0,0,1.5);
+        ground_box = dCreateBox (space,4,4,4);
+        dGeomSetPosition (ground_box,0,0,0);
 
     dAllocateODEDataForThread(dAllocateMaskAll);
 
@@ -28,7 +29,8 @@ void ofApp::setup(){
     if(!ofLoadImage(mGroundTex, "unnamed.png")) { std::cerr << "Failed to load ground texture." << std::endl; }
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    panda = new PandaPlayer(0,-50,6, world, space);
+    panda = new PandaPlayer(0,-55,1, world, space);
+    //ball = new Ball(0,0,0,world,space);
 
     /* The light */
     light.setPosition(-8,0,32);
@@ -46,7 +48,7 @@ void ofApp::setup(){
     light.enable();
 
     /* The light */
-    light.setPosition(0,-55,32);
+    light.setPosition(0,-8,32);
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
     light.enable();
 
@@ -64,10 +66,12 @@ void ofApp::setup(){
     upVector.set(0, 0, 1);
     camera.setAutoDistance(false);
     camera.setNearClip(0.01);
-    camera.setPosition(0,-55,4);
-    camera.lookAt({panda->getX(),panda->getY()+10,panda->getZ()},upVector);
+    camera.setPosition(0,-60,3);
+    camera.setPosition(0,-4,3);
+    camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
     camera.setUpAxis(upVector);
 
+    // panda = new PandaPlayer(0,0,5, world, space);
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
     bgImage.loadImage("thunderstorm-3625405_1920.jpg");
 }
@@ -89,23 +93,25 @@ void ofApp::update(){
     //if (keys[OF_KEY_DOWN] || keys['s']){ panda->setSpeed(-0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
 
 //    panda->update();
-//    if(fireBall == true) {
-//        if(fireon == true){
-//            ball->setRotY(panda->pAngle);
-//            fireon = false;
-//        }
-//        ball->setSpeed(0.25);
-//        //ball->update();
+    if(fireBall == true) {
+        if(fireon == true){
+            ball->setRotY(panda->pAngle);
+            fireon = false;
+        }
+        ball->setSpeed(0.15);
+        ball->update();
 
-//        if(((ball->y-panda->getY()) > 2) || ((ball->y-panda->getY()) < -2) || ((ball->x-panda->getX()) >2) || ((ball->x-panda->getX()) < -2) ){
-//            ball->x = panda->getX();
-//            ball->y = panda->getY();
-//            fireBall = false;
-//        }
-//    }
+        if(((ball->y-panda->getY()) > 4) || ((ball->y-panda->getY()) < -4) || ((ball->x-panda->getX()) >4) || ((ball->x-panda->getX()) < -4) ){
+            ball->x = panda->getX();
+            ball->y = panda->getY();
+            fireBall = false;
+        }
+    }
+
     //camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
 
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
+
     dSpaceCollide (space,0,&nearCallback);
     dWorldStep (world,0.05);
 
@@ -181,31 +187,30 @@ void ofApp::drawBox(const dReal*pos_ode, const dQuaternion rot_ode, const dReal*
 
     // Draw it:
     b.draw();
-
 }
 
 //--------------------------------------------------------------
 void ofApp::collide(dGeomID o1, dGeomID o2)
 {
-  int i,n;
+    int i,n;
 
-  // only collide things with the ground
-  //int g1 = (o1 == ground);
-  //int g2 = (o2 == ground );
+    // only collide things with the ground
+    //int g1 = (o1 == ground);
+    //int g2 = (o2 == ground );
 
-  if(ground == o1){
-      std::cout<< "hiiiiiii  02" << std::endl;
-  }else if(ground == o1){
-      std::cout << "hi 01" << std::endl;
-  }
-  int g1 = (o1 == ground || o1 == ground_box);
-  int g2 = (o2 == ground || o2 == ground_box);
-  //if (!(g1 ^ g2)) return;
+//    if(ground == o1){
+//      std::cout<< "hiiiiiii  02" << std::endl;
+//    }else if(ground == o1){
+//      std::cout << "hi 01" << std::endl;
+//    }
+    int g1 = (o1 == ground || o1 == ground_box);
+    int g2 = (o2 == ground || o2 == ground_box);
+    //if (!(g1 ^ g2)) return;
 
-  const int N = 10;
-  dContact contact[N];
-  n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-  if (n > 0) {
+    const int N = 10;
+    dContact contact[N];
+    n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
+    if (n > 0) {
     for (i=0; i<n; i++) {
       contact[i].surface.mode = dContactSlip1 | dContactSlip2 |
         dContactSoftERP | dContactSoftCFM | dContactApprox1;
@@ -219,7 +224,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     dGeomGetBody(contact[i].geom.g1),
                     dGeomGetBody(contact[i].geom.g2));
     }
-  }
+    }
 }
 
 //--------------------------------------------------------------
@@ -227,7 +232,7 @@ void ofApp::keyPressed(int key){
     keys[key] = 1;
     switch(key) {
     case 'r':
-        ball = new Ball(panda->getX()+.78,panda->getY()+(.25),panda->getZ()+.6,world,space);
+        ball = new Ball(panda->getX()+.78,panda->getY()+(.47),panda->getZ()+.1,world,space);
         ball->setRotY(panda->pAngle);
         seeBall = true;
         fireBall = true;
