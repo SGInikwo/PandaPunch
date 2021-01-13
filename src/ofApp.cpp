@@ -67,7 +67,7 @@ void ofApp::setup(){
     camera.setAutoDistance(false);
     camera.setNearClip(0.01);
     camera.setPosition(0,-60,3);
-    camera.setPosition(0,-4,3);
+    //camera.setPosition(0,-4,3);
     camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
     camera.setUpAxis(upVector);
 
@@ -90,6 +90,10 @@ void ofApp::update(){
     if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.145); panda->mModel.playAllAnimations();
         //panda->mModel.update();
     }
+    if(keys[32]){
+        panda->jump = true;
+        if(panda->jump == true) {panda->setZ(.3);}
+    }
     //if (keys[OF_KEY_DOWN] || keys['s']){ panda->setSpeed(-0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
 
 //    panda->update();
@@ -102,13 +106,14 @@ void ofApp::update(){
         ball->update();
 
         if(((ball->y-panda->getY()) > 4) || ((ball->y-panda->getY()) < -4) || ((ball->x-panda->getX()) >4) || ((ball->x-panda->getX()) < -4) ){
-            ball->x = panda->getX();
-            ball->y = panda->getY();
+//            ball->x = panda->getX();
+//            ball->y = panda->getY();
+            ball->~Ball();
             fireBall = false;
         }
     }
 
-    //camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
+    camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
 
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
 
@@ -233,7 +238,6 @@ void ofApp::keyPressed(int key){
     switch(key) {
     case 'r':
         ball = new Ball(panda->getX()+.78,panda->getY()+(.47),panda->getZ()+.1,world,space);
-        ball->setRotY(panda->pAngle);
         seeBall = true;
         fireBall = true;
         fireon =true;
@@ -247,6 +251,9 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     keys[key] = 0;
+    if(keys[32]){
+        panda->jump=false;
+    }
 }
 
 //--------------------------------------------------------------

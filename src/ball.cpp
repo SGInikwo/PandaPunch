@@ -90,3 +90,7 @@ void Ball::draw()
 
     ofPopMatrix();
 }
+
+Ball::~Ball(){
+    dGeomDestroy(mGeom);
+}

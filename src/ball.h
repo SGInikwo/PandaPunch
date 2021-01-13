@@ -12,6 +12,7 @@ class Ball
 {
 public:
     Ball(float x, float y, float z, dWorldID w, dSpaceID s);
+   ~Ball();
 
     void setPosition(float x, float y, float z);
     void setRotY (float pAngle);

@@ -25,11 +25,12 @@ public:
     float getY();
     float getZ();
 
-    const float c_len=1.85,c_wid=1.2,c_hei=1;
+    const float c_len=1.85,c_wid=1.2,c_hei=1.9;
     float x, y, z;
     float speed;
 
     bool debugDraw = true;
+    bool jump = false;
 
     dReal pAngle = 0;
     dReal pElevation = 0;

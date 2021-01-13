@@ -18,7 +18,7 @@ PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
     mModel.loadModel("panda.dae", 20);
     double scale = .5/ mModel.getNormalizedScale();
 
-    mModel.setScale(scale,scale*.5,scale);
+    mModel.setScale(scale,scale,scale);
     mModel.setRotation(0,90.0,1,0,0);
 
     std::cout << " first x: " << x << std::endl;
@@ -48,8 +48,17 @@ void PandaPlayer::setSpeed(float speed){
     std::cout << "x: " << x << " y: " << y  << " z: " << z << std::endl;
 }
 
-void PandaPlayer::setZ(float z){
-    this->z=z;
+void PandaPlayer::setZ(float up){
+    //this->z=z;
+    if(jump == true && z < 3){
+    z+=up;
+
+    dBodySetPosition(mBody, x, y, z);
+
+    const dReal* thePos = dBodyGetPosition(mBody);
+
+
+    setPosition(thePos[0],thePos[1], thePos[2]);}
 }
 
 float PandaPlayer::getX(){
@@ -104,7 +113,7 @@ void PandaPlayer::draw(){
 
     ofPushMatrix();
 
-    mModel.setPosition(x,y,z-.5);
+    mModel.setPosition(x,y,z-.4);
     //dBodySetPosition(mBody, x, y, z);
     //dGeomSetBody (mGeom, mBody);
     mModel.setRotation(1,pAngle,0,1,0);
