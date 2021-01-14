@@ -1,6 +1,6 @@
-#include "pandaplayer.h"
+#include "chest.h"
 
-PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
+Chest::Chest(float x, float y, float z, dWorldID w, dSpaceID s)
 {
     /* Set our x,y,z variables */
     this->x=x; this->y=y; this->z=z;
@@ -12,81 +12,31 @@ PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
     dMassAdjust (&mMass,1);
     dBodySetMass (mBody,&mMass);
     mGeom = dCreateBox(s, c_len,c_wid,c_hei);
+    //dGeomSetPosition(mGeom,x,y,z);
     dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
-    mModel.loadModel("panda.dae", 20);
-    double scale = .5/ mModel.getNormalizedScale();
+    mModel.loadModel("uploads_files_1979146_chest.dae", 20);
+    double scale = .2/ mModel.getNormalizedScale();
 
-    mModel.setScale(scale,scale,scale);
+    mModel.setScale(scale*.5,scale*.5,scale*.5);
     mModel.setRotation(0,90.0,1,0,0);
-
-    std::cout << " first x: " << x << std::endl;
-    std::cout << " first Angle: " << pAngle << std::endl;
 }
 
-void PandaPlayer::setPosition(float x, float y, float z)
+void Chest::setPosition(float x, float y, float z)
 {
     /* Setter method for position */
     this->x=x; this->y=y; this->z=z;
-    dBodySetPosition(mBody, x, y, z);
+    //dBodySetPosition(mBody, x, y, z);
     //dGeomSetBody (mGeom, mBody);
 }
 
-void PandaPlayer::setSpeed(float speed){
-    x += sin(pAngle*0.0174532925) * -speed;
-    y += cos(pAngle*0.0174532925) * speed;
-
-    dBodySetPosition(mBody, x, y, z);
-
-    const dReal* thePos = dBodyGetPosition(mBody);
-
-
-    setPosition(thePos[0],thePos[1], thePos[2]);
-
-    //dGeomSetBody (mGeom, mBody);
-    std::cout << "x: " << x << " y: " << y  << " z: " << z << std::endl;
-}
-
-void PandaPlayer::setZ(float up){
-    //this->z=z;
-    if(jump == true && z < 3){
-    z+=up;
-
-    dBodySetPosition(mBody, x, y, z);
-
-    const dReal* thePos = dBodyGetPosition(mBody);
-
-
-    setPosition(thePos[0],thePos[1], thePos[2]);}
-}
-
-float PandaPlayer::getX(){
-    return x;
-}
-
-float PandaPlayer::getY(){
-    return y;
-}
-
-float PandaPlayer::getZ(){
-    return z;
-}
-
-void PandaPlayer::setRotY (float pAngle){
-    this->pAngle += pAngle;
-}
-
-float PandaPlayer::getRotX (){
-    return pAngle;
-}
-
-void PandaPlayer::draw(){
+void Chest::draw(){
     const dReal* thePos = dBodyGetPosition(mBody);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
 
-    if(!debugDraw) {
+    if(debugDraw) {
         dVector3 ss; dQuaternion r;
             dGeomBoxGetLengths (mGeom,ss);
             dGeomGetQuaternion(mGeom,r);
@@ -113,7 +63,7 @@ void PandaPlayer::draw(){
 
     ofPushMatrix();
 
-    mModel.setPosition(x,y,z-.4);
+    mModel.setPosition(x,y,z-.5);
     //dBodySetPosition(mBody, x, y, z);
     //dGeomSetBody (mGeom, mBody);
     mModel.setRotation(1,pAngle,0,1,0);
@@ -123,4 +73,8 @@ void PandaPlayer::draw(){
     ofPopMatrix();
 }
 
-
+void Chest::disable(){
+    dBodyDisable(mBody);
+    dGeomDisable(mGeom);
+    //dGeomDestroy(mGeom);
+}

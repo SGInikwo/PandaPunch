@@ -16,13 +16,13 @@ void ofApp::setup(){
     ground = dCreatePlane (space,0,0,1,0);
 
     // environment
-        ground_box = dCreateBox (space,4,4,4);
-        dGeomSetPosition (ground_box,0,0,0);
+//        ground_box = dCreateBox (space,4,4,4);
+//        dGeomSetPosition (ground_box,0,0,0);
 
     dAllocateODEDataForThread(dAllocateMaskAll);
 
     /* Graphics ground plane */
-    mGround.set(64,128);
+    mGround.set(32,128);
     mGround.mapTexCoords(0,0,8,8);
     mGround.setResolution(128,128);
 
@@ -33,24 +33,27 @@ void ofApp::setup(){
     //ball = new Ball(0,0,0,world,space);
 
     /* The light */
-    light.setPosition(-8,0,32);
+    light.setPointLight();
+    light.setPosition(0,-70,10);
     light.lookAt(glm::vec3(0,0,0));
     light.enable();
 
     /* The light */
-    light.setPosition(8,0,32);
-    light.lookAt(glm::vec3(0,0,0));
-    light.enable();
+    light2.setPointLight();
+    light2.setPosition(0,70,10);
+    light2.lookAt(glm::vec3(8,0,0));
+    light2.enable();
 
     /* The light */
-    light.setPosition(0,8,32);
-    light.lookAt(glm::vec3(0,0,0));
-    light.enable();
+    light3.setPointLight();
+    light3.setPosition(0,0,32);
+    light3.lookAt(glm::vec3(0,8,0));
+    light3.enable();
 
     /* The light */
-    light.setPosition(0,-8,32);
-    light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
-    light.enable();
+//    light4.setPosition(0,-8,32);
+//    light4.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
+//    light4.enable();
 
     // Set up the OpenFrameworks camera
     //camera.setAutoDistance(true);
@@ -70,6 +73,18 @@ void ofApp::setup(){
     //camera.setPosition(0,-4,3);
     camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
     camera.setUpAxis(upVector);
+
+    for(unsigned int p=0; p<2; p++) {
+        chests.push_back(new Chest(ofRandom(-15,15), -20, 1, world, space) );
+//        chests2.push_back(new Chest(ofRandom(-15,15), -20, 1, world, space) );
+//        chests3.push_back(new Chest(ofRandom(-15,15), 0, 1, world, space) );
+//        chests4.push_back(new Chest(ofRandom(-15,15), 10, 1, world, space) );
+//        chests5.push_back(new Chest(ofRandom(-15,15), 15, 1, world, space) );
+//        chests6.push_back(new Chest(ofRandom(-15,15), 30, 1, world, space) );
+//        chests7.push_back(new Chest(ofRandom(-15,15), 40, 1, world, space) );
+//        chests8.push_back(new Chest(ofRandom(-15,15), 50, 1, world, space) );
+
+    }
 
     // panda = new PandaPlayer(0,0,5, world, space);
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
@@ -105,7 +120,7 @@ void ofApp::update(){
         ball->setSpeed(0.15);
         ball->update();
 
-        if(((ball->y-panda->getY()) > 4) || ((ball->y-panda->getY()) < -4) || ((ball->x-panda->getX()) >4) || ((ball->x-panda->getX()) < -4) ){
+        if(((ball->y-panda->getY()) > 7) || ((ball->y-panda->getY()) < -7) || ((ball->x-panda->getX()) >7) || ((ball->x-panda->getX()) < -7) ){
 //            ball->x = panda->getX();
 //            ball->y = panda->getY();
             ball->~Ball();
@@ -113,6 +128,14 @@ void ofApp::update(){
         }
     }
 
+    if(move == true){
+        panda->setPosition(panda->getX(),panda->getY()-20,panda->getZ());
+        move =false;
+    }
+    if(ballCol == true){
+        ball->setPosition(ball->x, ball->y,-40);
+        ballCol = false;
+    }
     camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
 
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
@@ -145,13 +168,21 @@ void ofApp::draw(){
     //ofDrawAxis(10);
 
     // ground box
-        ofSetColor(ofColor::blue);
-        dVector3 ss; dQuaternion r;
-        dGeomBoxGetLengths (ground_box,ss);
-        dGeomGetQuaternion(ground_box,r);
-        drawBox(dGeomGetPosition(ground_box),r,ss);
+//        ofSetColor(ofColor::blue);
+//        dVector3 ss; dQuaternion r;
+//        dGeomBoxGetLengths (ground_box,ss);
+//        dGeomGetQuaternion(ground_box,r);
+//        drawBox(dGeomGetPosition(ground_box),r,ss);
 
     /* Draw the pallets */
+    for(auto x: chests ) x->draw();
+//    for(auto x: chests2 ) x->draw();
+//    for(auto x: chests3 ) x->draw();
+//    for(auto x: chests4 ) x->draw();
+//    for(auto x: chests5 ) x->draw();
+//    for(auto x: chests6 ) x->draw();
+//    for(auto x: chests7) x->draw();
+//    for(auto x: chests8 ) x->draw();
     panda->draw();
     if(seeBall) ball->draw();
 
@@ -203,11 +234,28 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
     //int g1 = (o1 == ground);
     //int g2 = (o2 == ground );
 
-//    if(ground == o1){
+//    if(ball->mGeom == o1){
 //      std::cout<< "hiiiiiii  02" << std::endl;
-//    }else if(ground == o1){
+//    }else if(ball->mGeom == o1){
 //      std::cout << "hi 01" << std::endl;
 //    }
+
+    //std::cout << "Before "<< o1 << " and " << o2 << std::endl;
+    for(auto x: chests){
+        if(o2 == x->mGeom){
+            if( o1 == panda->mGeom){
+                cout<< "hi there im a panda!!!!!"<<endl;
+                move = true;
+                return;
+            }
+            if(o1 == ball->mGeom){
+                cout<< "!!!!!!hi there im a ballll!!!!!"<<endl;
+                x->disable();
+                ballCol = true;
+            }
+        }
+    }
+
     int g1 = (o1 == ground || o1 == ground_box);
     int g2 = (o2 == ground || o2 == ground_box);
     //if (!(g1 ^ g2)) return;

@@ -4,6 +4,7 @@
 #include "ode/ode.h"
 #include "pandaplayer.h"
 #include "ball.h"
+#include "chest.h"
 
 #include "ofxAssimpModelLoader.h"
 
@@ -35,7 +36,7 @@ public:
     /* These variables are straight from demo_buggy.cpp */
     dWorldID world;
     dSpaceID space;
-    dJointGroupID contactgroup;
+    dJointGroupID contactgroup ;
     dGeomID ground;
 
     ofEasyCam camera;
@@ -43,6 +44,10 @@ public:
     ofPlanePrimitive mGround;
     ofTexture mGroundTex;
     ofLight light;
+    ofLight light2;
+    ofLight light3;
+    ofLight light4;
+    ofLight light5;
     ofImage bgImage;
 
     dGeomID ground_box;
@@ -50,10 +55,21 @@ public:
     /* A vector of pallets */
     PandaPlayer* panda;
     Ball* ball;
+    vector<Chest*> chests;
+    vector<Chest*> chests2;
+    vector<Chest*> chests3;
+    vector<Chest*> chests4;
+    vector<Chest*> chests5;
+    vector<Chest*> chests6;
+    vector<Chest*> chests7;
+    vector<Chest*> chests8;
+
 
     bool seeBall = false;
     bool fireBall = false;
     bool fireon = true;
+    bool move = false;
+    bool ballCol = false;
 };
 
 static void nearCallback (void *, dGeomID o1, dGeomID o2);

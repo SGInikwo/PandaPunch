@@ -42,6 +42,7 @@ void Ball::setPosition(float x, float y, float z)
 {
     /* Setter method for position */
     this->x=x; this->y=y; this->z=z;
+    dBodySetPosition(mBody, x, y, z);
 }
 
 void Ball::update(){
@@ -92,5 +93,6 @@ void Ball::draw()
 }
 
 Ball::~Ball(){
-    dGeomDestroy(mGeom);
+    dBodyDisable(mBody);
+    dGeomDisable(mGeom);
 }
