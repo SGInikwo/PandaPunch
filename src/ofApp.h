@@ -59,6 +59,7 @@ public:
     Ball* ball;
     Cannon* cannon;
 
+    vector<Cannon*> canList;
     vector<Chest*> chests;
     vector<Chest*> chests2;
     vector<Chest*> chests3;

@@ -74,9 +74,22 @@ void ofApp::setup(){
     camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
     camera.setUpAxis(upVector);
 
-    cannon = new Cannon(0, -2, 1.2, world, space);
-    cannon->ballSetup(cannon->x,cannon->y-5,cannon->z+.6,world,space);
+    //cannon = new Cannon(0, -2, 1.2, world, space);
+    //cannon->ballSetup(cannon->x,cannon->y-5,cannon->z+.6,world,space);
 
+    float ranX[3];
+
+    ranX[0] = ofRandom(-12,-7);
+    ranX[1] = ofRandom(-3,5);
+    ranX[2] = ofRandom(9,13);
+
+    for(unsigned int p=0; p<3; p++) {
+        canList.push_back((new Cannon(ranX[p], -2, 1.2, world, space)));
+    }
+
+    for(auto x : canList ){
+        x->ballSetup(x->x,x->y-5,x->z+.6,world,space);
+    }
 
     for(unsigned int p=0; p<1; p++) {
         chests.push_back(new Chest(0, -9, 1, world, space) );
@@ -142,7 +155,10 @@ void ofApp::update(){
     }
 
 
-    cannon->setSpeed(-.7);
+    //cannon->setSpeed(-.7);
+    for(auto x : canList){
+        x->setSpeed(-.7);
+    }
     cannonLogic();
 
 
@@ -197,10 +213,15 @@ void ofApp::draw(){
 //    for(auto x: chests7) x->draw();
 //    for(auto x: chests8 ) x->draw();
     panda->draw();
-    cannon->draw();
+
+    for(auto x : canList){
+        x->draw();
+        x->drawBall();
+    }
+    //cannon->draw();
 
 
-    cannon->drawBall();
+    //cannon->drawBall();
 
 
 
@@ -258,13 +279,28 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 //    }
 
     /* cannon ball collision with panda */
-    if(o1 == cannon->bGeom){
-        //cout<< "hi there and die!!" << endl;
-        if(o2 == panda->mGeom){
-            cout<<"noooo pandaaaa!!"<< endl;
+//    if(o1 == cannon->bGeom){
+//        //cout<< "hi there and die!!" << endl;
+//        if(o2 == panda->mGeom){
+//            cout<<"noooo pandaaaa!!"<< endl;
+//        }
+//    }
+    //std::cout << "Before "<< o1 << " and " << o2 << std::endl;
+    for(auto x: canList){
+        if(o2 == x->bGeom){
+            cout<< "Cannnnnnooooonnnn"<<endl;
+//            if( o1 == panda->mGeom){
+//                cout<< "hi there im a panda!!!!!"<<endl;
+//                move = true;
+//                return;
+//            }
+//            if(o1 == ball->mGeom){
+//                cout<< "!!!!!!hi there im a ballll!!!!!"<<endl;
+//                //x->disable();
+//                ballCol = true;
+//            }
         }
     }
-    //std::cout << "Before "<< o1 << " and " << o2 << std::endl;
 
     /* Collision with chest and either panda and his punch */
     for(auto x: chests){
@@ -382,13 +418,22 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::cannonLogic(){
     cout << "my pos " << panda->getY() << endl;
 
-    if( cannon->bY < (panda->getY()-20) && ( fabs((cannon->y) - (panda->getY())) ) < 20 ) {
-        cannon->setPosition(ofRandom(-10,-5),-2,1.2);
-        cannon->ballSetup(cannon->x,cannon->y-10,cannon->z+.6,world,space);
+    int i =0;
+    for(auto x : canList){
+        float ranX[3];
+        ranX[0] = ofRandom(-12,-5);
+        ranX[1] = ofRandom(-3,6);
+        ranX[2] = ofRandom(9,13);
+        if(panda->getY() > x->y){
+            cout << "don't shoot....pls" << endl;
+        }else if( x->bY < (panda->getY()-20) && ( fabs((x->y) - (panda->getY())) ) < 20 ) {
+            x->setPosition(ranX[i],-2,1.2);
+            x->ballSetup(x->x,x->y-10,x->z+.6,world,space);
+        }
+        else if( ( x->bY < (panda->getY()-5) && ( fabs((x->y) - (panda->getY())) ) > 20 ) ) {
+            x->setPosition(ranX[i],-2,1.2);
+            x->ballSetup(x->x,x->y-10,x->z+.6,world,space);
+        }
+        i++;
     }
-    else if( ( cannon->bY < (panda->getY()-5) && ( fabs((cannon->y) - (panda->getY())) ) > 20 ) ) {
-        cannon->setPosition(ofRandom(-10,-5),-2,1.2);
-        cannon->ballSetup(cannon->x,cannon->y-10,cannon->z+.6,world,space);
-    }
-
 }
