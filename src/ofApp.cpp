@@ -29,7 +29,7 @@ void ofApp::setup(){
     if(!ofLoadImage(mGroundTex, "unnamed.png")) { std::cerr << "Failed to load ground texture." << std::endl; }
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    panda = new PandaPlayer(0,-55,1, world, space);
+    panda = new PandaPlayer(10,-55,1, world, space);
     //ball = new Ball(0,0,0,world,space);
 
     /* The light */
@@ -69,13 +69,17 @@ void ofApp::setup(){
     upVector.set(0, 0, 1);
     camera.setAutoDistance(false);
     camera.setNearClip(0.01);
-    camera.setPosition(0,-60,3);
+    camera.setPosition(panda->getX(),-60,3);
     //camera.setPosition(0,-4,3);
     camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
     camera.setUpAxis(upVector);
 
-    for(unsigned int p=0; p<2; p++) {
-        chests.push_back(new Chest(ofRandom(-15,15), -20, 1, world, space) );
+    cannon = new Cannon(0, -2, 1.2, world, space);
+    cannon->ballSetup(cannon->x,cannon->y-5,cannon->z+.6,world,space);
+
+
+    for(unsigned int p=0; p<1; p++) {
+        chests.push_back(new Chest(0, -9, 1, world, space) );
 //        chests2.push_back(new Chest(ofRandom(-15,15), -20, 1, world, space) );
 //        chests3.push_back(new Chest(ofRandom(-15,15), 0, 1, world, space) );
 //        chests4.push_back(new Chest(ofRandom(-15,15), 10, 1, world, space) );
@@ -88,13 +92,14 @@ void ofApp::setup(){
 
     // panda = new PandaPlayer(0,0,5, world, space);
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
-    bgImage.loadImage("thunderstorm-3625405_1920.jpg");
+    bgImage.load("thunderstorm-3625405_1920.jpg");
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     //float lastTime;
     //float currentTime = ofGetElapsedTimef();
+
     /* Handle the keys: */
     if (keys[OF_KEY_LEFT] || keys['a']){
         panda->setRotY(3);
@@ -109,9 +114,8 @@ void ofApp::update(){
         panda->jump = true;
         if(panda->jump == true) {panda->setZ(.3);}
     }
-    //if (keys[OF_KEY_DOWN] || keys['s']){ panda->setSpeed(-0.145); panda->mModel.playAllAnimations(); panda->mModel.update();}
 
-//    panda->update();
+    //    panda->update();
     if(fireBall == true) {
         if(fireon == true){
             ball->setRotY(panda->pAngle);
@@ -136,6 +140,15 @@ void ofApp::update(){
         ball->setPosition(ball->x, ball->y,-40);
         ballCol = false;
     }
+
+
+    cannon->setSpeed(-.7);
+    cannonLogic();
+
+
+
+
+
     camera.setPosition(panda->getX(),panda->getY()-5,panda->getZ()+2);
 
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
@@ -159,7 +172,7 @@ void ofApp::draw(){
 
     ofPushMatrix();
 
-    ofSetColor(ofColor::lightGrey);
+    ofSetColor(ofColor::white);
     //ofDrawGrid(0.2f,100, false, false,false,true);
     mGroundTex.bind();
     mGround.draw();
@@ -184,8 +197,16 @@ void ofApp::draw(){
 //    for(auto x: chests7) x->draw();
 //    for(auto x: chests8 ) x->draw();
     panda->draw();
+    cannon->draw();
+
+
+    cannon->drawBall();
+
+
+
     if(seeBall) ball->draw();
 
+    ofSetColor(ofColor::white);
     ofDisableDepthTest();
     camera.end();
 
@@ -230,17 +251,22 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 {
     int i,n;
 
-    // only collide things with the ground
-    //int g1 = (o1 == ground);
-    //int g2 = (o2 == ground );
-
 //    if(ball->mGeom == o1){
 //      std::cout<< "hiiiiiii  02" << std::endl;
 //    }else if(ball->mGeom == o1){
 //      std::cout << "hi 01" << std::endl;
 //    }
 
+    /* cannon ball collision with panda */
+    if(o1 == cannon->bGeom){
+        //cout<< "hi there and die!!" << endl;
+        if(o2 == panda->mGeom){
+            cout<<"noooo pandaaaa!!"<< endl;
+        }
+    }
     //std::cout << "Before "<< o1 << " and " << o2 << std::endl;
+
+    /* Collision with chest and either panda and his punch */
     for(auto x: chests){
         if(o2 == x->mGeom){
             if( o1 == panda->mGeom){
@@ -256,8 +282,8 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
         }
     }
 
-    int g1 = (o1 == ground || o1 == ground_box);
-    int g2 = (o2 == ground || o2 == ground_box);
+    //int g1 = (o1 == ground || o1 == ground_box);
+    //int g2 = (o2 == ground || o2 == ground_box);
     //if (!(g1 ^ g2)) return;
 
     const int N = 10;
@@ -289,6 +315,10 @@ void ofApp::keyPressed(int key){
         seeBall = true;
         fireBall = true;
         fireon =true;
+        break;
+    case 'f':
+        //cannon->ballSetup(cannon->x,cannon->y-5,cannon->z+.6,world,space);
+        //shoot =true;
         break;
     case 'q':
         ofExit();
@@ -346,5 +376,19 @@ void ofApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
+
+}
+
+void ofApp::cannonLogic(){
+    cout << "my pos " << panda->getY() << endl;
+
+    if( cannon->bY < (panda->getY()-20) && ( fabs((cannon->y) - (panda->getY())) ) < 20 ) {
+        cannon->setPosition(ofRandom(-10,-5),-2,1.2);
+        cannon->ballSetup(cannon->x,cannon->y-10,cannon->z+.6,world,space);
+    }
+    else if( ( cannon->bY < (panda->getY()-5) && ( fabs((cannon->y) - (panda->getY())) ) > 20 ) ) {
+        cannon->setPosition(ofRandom(-10,-5),-2,1.2);
+        cannon->ballSetup(cannon->x,cannon->y-10,cannon->z+.6,world,space);
+    }
 
 }

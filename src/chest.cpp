@@ -5,6 +5,9 @@ Chest::Chest(float x, float y, float z, dWorldID w, dSpaceID s)
     /* Set our x,y,z variables */
     this->x=x; this->y=y; this->z=z;
 
+
+
+
     /* Set up physics objects */
     mBody = dBodyCreate(w);
     dBodySetPosition(mBody, x, y, z);
@@ -21,6 +24,10 @@ Chest::Chest(float x, float y, float z, dWorldID w, dSpaceID s)
 
     mModel.setScale(scale*.5,scale*.5,scale*.5);
     mModel.setRotation(0,90.0,1,0,0);
+    if(this->y > -10 && this->y < 10){
+        disable();
+        cout<<"goodby"<<endl;
+    }
 }
 
 void Chest::setPosition(float x, float y, float z)
@@ -35,7 +42,7 @@ void Chest::draw(){
     const dReal* thePos = dBodyGetPosition(mBody);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
-
+if(gone == false){
     if(debugDraw) {
         dVector3 ss; dQuaternion r;
             dGeomBoxGetLengths (mGeom,ss);
@@ -49,7 +56,7 @@ void Chest::draw(){
         /* Translate to the correct position: */
         ofTranslate(f[0],f[1],f[2]);
 
-        cout << " f X "<< f[0]<< " f Y " << f[1] << " f Z " << f[2] << endl;
+        //cout << " f X "<< f[0]<< " f Y " << f[1] << " f Z " << f[2] << endl;
 
         /* Rotate by the correct amount: */
         //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
@@ -59,7 +66,7 @@ void Chest::draw(){
 
         /* Restore the graphics transform stack: */
         ofPopMatrix();
-        }
+    }
 
     ofPushMatrix();
 
@@ -68,7 +75,9 @@ void Chest::draw(){
     //dGeomSetBody (mGeom, mBody);
     mModel.setRotation(1,pAngle,0,1,0);
 
-    mModel.drawFaces();
+
+        mModel.drawFaces();
+    }
 
     ofPopMatrix();
 }
@@ -76,5 +85,6 @@ void Chest::draw(){
 void Chest::disable(){
     dBodyDisable(mBody);
     dGeomDisable(mGeom);
+    gone = true;
     //dGeomDestroy(mGeom);
 }

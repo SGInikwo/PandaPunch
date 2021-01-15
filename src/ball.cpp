@@ -61,29 +61,29 @@ void Ball::draw()
     setPosition(thePos[0],thePos[1], thePos[2]);
 
     if(!debugDraw) {
-            ofSetColor(ofColor::white,128);
-            /* Save the current state of the graphics transform stack: */
-            ofPushMatrix();
+        ofSetColor(ofColor::white,128);
+        /* Save the current state of the graphics transform stack: */
+        ofPushMatrix();
 
-            /* Translate to the correct position: */
-            ofTranslate(x,y,z);
+        /* Translate to the correct position: */
+        ofTranslate(x,y,z);
 
-            /* Rotate by the correct amount: */
-            //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
+        /* Rotate by the correct amount: */
+        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
 
-            /* Draw the box */
-            ofDrawSphere(c_rad);
+        /* Draw the box */
+        ofDrawSphere(c_rad);
 
-            /* Restore the graphics transform stack: */
-            ofPopMatrix();
-        }
+        /* Restore the graphics transform stack: */
+        ofPopMatrix();
+    }
     ofPushMatrix();
 
     //const dReal* thePos = dBodyGetPosition(mBody);
 
     //setPosition(thePos[0],thePos[1], thePos[2]);
 
-    std::cout << "x: " << x << " y: " << y  << " z: " << z << std::endl;
+    //std::cout << "x: " << x << " y: " << y  << " z: " << z << std::endl;
     mModel.setPosition(x,y,z);
     //mModel.setRotation(1,pAngle,0,1,0);
 

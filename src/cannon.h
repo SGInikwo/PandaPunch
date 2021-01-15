@@ -3,47 +3,53 @@
 #include "ofMain.h"
 #include "ofxAssimpModelLoader.h"
 #include "ofxAssimpAnimation.h"
-#include "ball.h"
 
-#ifndef CHEST_H
-#define CHEST_H
+#ifndef CANNON_H
+#define CANNON_H
 
 
-class Chest
+class Cannon
 {
 public:
-    Chest(float x, float y, float z, dWorldID w, dSpaceID s);
-    void disable();
+    Cannon(float x, float y, float z, dWorldID w, dSpaceID s);
 
     void setPosition(float x, float y, float z);
+    void setBallPosition(float bX, float bY, float bZ);
     //void setRotY (float pAngle);
-    //void setSpeed(float speed);
+    void setSpeed(float speed);
     //void setZ(float z);
     void draw();
+    void drawBall();
+    void ballSetup(float x, float y, float z, dWorldID w, dSpaceID s);
 
     //float getRotX ();
     //float getX();
     //float getY();
     //float getZ();
 
-    const float c_len=1.5,c_wid=1,c_hei=1;
+    const float c_len=2.5,c_wid=2.5,c_hei=2.3;
+    const float c_rad=.4;
     float x, y, z;
+    float bX, bY, bZ;
     float speed;
 
     bool debugDraw = true;
     bool hit = false;
-    bool gone = false;
+    bool ball = false;
 
     dReal pAngle = 0;
     dReal pElevation = 0;
 
     /* ODE objects */
     dBodyID mBody;
+    dBodyID bBody;
     dGeomID mGeom;
+    dGeomID bGeom;
     dMass   mMass;
+    dMass   bMass;
 
     /* The 3D model */
     ofxAssimpModelLoader mModel;
 };
 
-#endif // CHEST_H
+#endif // CANNON_H

@@ -14,6 +14,8 @@ Project{
         files: [
             "src/ball.cpp",
             "src/ball.h",
+            "src/cannon.cpp",
+            "src/cannon.h",
             "src/chest.cpp",
             "src/chest.h",
             "src/pandaplayer.cpp",

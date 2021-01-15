@@ -23,7 +23,7 @@ public:
     float x, y, z;
     //float offX=0.745,offY=0.4,offZ=1.2;
     bool debugDraw = true;
-    const float c_rad=.085;;
+    const float c_rad=.085;
 
     /* ODE objects */
     dBodyID mBody;

@@ -5,6 +5,7 @@
 #include "pandaplayer.h"
 #include "ball.h"
 #include "chest.h"
+#include "cannon.h"
 
 #include "ofxAssimpModelLoader.h"
 
@@ -30,6 +31,7 @@ public:
     void collide (dGeomID o1, dGeomID o2);
 
     void drawBox(const dReal*pos_ode, const dQuaternion rot_ode, const dReal*sides_ode);
+    void cannonLogic();
 
     unsigned int keys[65536];
 
@@ -55,6 +57,8 @@ public:
     /* A vector of pallets */
     PandaPlayer* panda;
     Ball* ball;
+    Cannon* cannon;
+
     vector<Chest*> chests;
     vector<Chest*> chests2;
     vector<Chest*> chests3;
@@ -70,6 +74,10 @@ public:
     bool fireon = true;
     bool move = false;
     bool ballCol = false;
+    bool shoot = false;
+    bool there = false;
+    bool already = false;
+    bool travel = true;
 };
 
 static void nearCallback (void *, dGeomID o1, dGeomID o2);
