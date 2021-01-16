@@ -30,7 +30,14 @@ public:
     void gotMessage(ofMessage msg);
     void collide (dGeomID o1, dGeomID o2);
 
-    void drawBox(const dReal*pos_ode, const dQuaternion rot_ode, const dReal*sides_ode);
+    void level1Setup();
+    void level1Update();
+    void level1Draw();
+    void level1Exit();
+
+    void end1Setup();
+    void end1Draw();
+
     void cannonLogic();
 
     unsigned int keys[65536];
@@ -51,24 +58,24 @@ public:
     ofLight light4;
     ofLight light5;
     ofImage bgImage;
+    ofImage shieldIm;
+    ofImage pointIm;
+    ofImage trophyIm;
+    ofTrueTypeFont healthTex;
+    ofTrueTypeFont upTex;
+    ofTrueTypeFont shieldsTex;
+    ofTrueTypeFont pointsTex;
+    ofTrueTypeFont endTex;
 
     dGeomID ground_box;
 
     /* A vector of pallets */
     PandaPlayer* panda;
     Ball* ball;
-    Cannon* cannon;
+    //Cannon* cannon;
 
     vector<Cannon*> canList;
     vector<Chest*> chests;
-    vector<Chest*> chests2;
-    vector<Chest*> chests3;
-    vector<Chest*> chests4;
-    vector<Chest*> chests5;
-    vector<Chest*> chests6;
-    vector<Chest*> chests7;
-    vector<Chest*> chests8;
-
 
     bool seeBall = false;
     bool fireBall = false;
@@ -79,6 +86,17 @@ public:
     bool there = false;
     bool already = false;
     bool travel = true;
+    bool isShield = false;
+    bool isPoint = false;
+    bool gotTrophy = false;
+
+    int health = 100;
+    int points = 0;
+    int shields = 0;
+    int ranNum;
+
+    float lastTime;
+    float currentTime;
 };
 
 static void nearCallback (void *, dGeomID o1, dGeomID o2);

@@ -24,10 +24,6 @@ Chest::Chest(float x, float y, float z, dWorldID w, dSpaceID s)
 
     mModel.setScale(scale*.5,scale*.5,scale*.5);
     mModel.setRotation(0,90.0,1,0,0);
-    if(this->y > -10 && this->y < 10){
-        disable();
-        cout<<"goodby"<<endl;
-    }
 }
 
 void Chest::setPosition(float x, float y, float z)
@@ -41,7 +37,9 @@ void Chest::setPosition(float x, float y, float z)
 void Chest::draw(){
     const dReal* thePos = dBodyGetPosition(mBody);
 
+
     setPosition(thePos[0],thePos[1], thePos[2]);
+
 if(gone == false){
     if(debugDraw) {
         dVector3 ss; dQuaternion r;

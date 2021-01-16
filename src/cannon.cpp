@@ -6,15 +6,15 @@ Cannon::Cannon(float x, float y, float z, dWorldID w, dSpaceID s)
     this->x=x; this->y=y; this->z=z;
 
     /* Set up physics objects */
-    mBody = dBodyCreate(w);
-    dBodySetPosition(mBody, x, y, z);
-    dBodySetGravityMode(mBody,0);
-    dMassSetBox (&mMass,1,c_len,c_wid,c_hei);
-    dMassAdjust (&mMass,0.01);
-    dBodySetMass (mBody,&mMass);
+    //mBody = dBodyCreate(w);
+    //dBodySetPosition(mBody, x, y, z);
+    //dBodySetGravityMode(mBody,0);
+    //dMassSetBox (&mMass,1,c_len,c_wid,c_hei);
+    //dMassAdjust (&mMass,0.01);
+    //dBodySetMass (mBody,&mMass);
     mGeom = dCreateBox(s, c_len,c_wid,c_hei);
-    //dGeomSetPosition(mGeom,x,y,z);
-    dGeomSetBody (mGeom, mBody);
+    dGeomSetPosition(mGeom,x,y,z);
+    //dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
     mModel.loadModel("cannon.dae", 20);
@@ -30,12 +30,12 @@ void Cannon::setPosition(float x, float y, float z)
 {
     /* Setter method for position */
     this->x=x; this->y=y; this->z=z;
-    dBodySetPosition(mBody, x, y, z);
+    dGeomSetPosition(mGeom, x, y, z);
 }
 
 void Cannon::draw()
 {
-    const dReal* thePos = dBodyGetPosition(mBody);
+    const dReal* thePos = dGeomGetPosition(mGeom);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
 
