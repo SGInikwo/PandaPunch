@@ -88,14 +88,23 @@ public:
     bool travel = true;
     bool isShield = false;
     bool isPoint = false;
+    bool is2Point = false;
     bool gotTrophy = false;
+    bool loseHealth = true;
+    bool shieldPress = true;
+    bool shieldEnd = false;
+    bool runShield = false;
+    bool toStart = false;
 
     int health = 100;
     int points = 0;
     int shields = 0;
-    int ranNum;
+    int pointTime;
+    int point2Time;
+    int shieldTime;
+    int healthTime;
 
-    float lastTime;
+    //loat lastTime;
     float currentTime;
 };
 

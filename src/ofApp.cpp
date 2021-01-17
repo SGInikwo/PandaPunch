@@ -35,10 +35,13 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 
     for(auto x: canList){
         if(x->bGeom == o1 || x->bGeom == o2){
-            cout<< "Cannnnnnooooonnnn"<<endl;
+            //cout<< "Cannnnnnooooonnnn"<<endl;
             if(panda->mGeom == o1 || panda->mGeom == o2){
-                cout<< "hi there im a panda!!!!!"<<endl;
-                health-=5;
+                //cout<< "hi there im a panda!!!!!"<<endl;
+                if(loseHealth == true){
+                    health-=3;
+                    cout<<"My health " << health << endl;
+                }
             }
 //            if(o1 == ball->mGeom){
 //                cout<< "!!!!!!hi there im a ballll!!!!!"<<endl;
@@ -46,6 +49,14 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 //                ballCol = true;
 //            }
         }
+        if(x->mGeom == o1 || x->mGeom == o2){
+            if(loseHealth == true){
+                toStart = true;
+                health-=20;
+            }
+            return;
+        }
+
     }
 
     /* Collision with chest and either panda and his punch */
@@ -54,22 +65,26 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
             if( o1 == panda->mGeom){
                 ///cout<< "hi there im a panda!!!!!"<<endl;
                 move = true;
+                if(loseHealth == true) {health-=1;}
                 return;
             }
             if(fireBall == true){
                 if(o1 == ball->mGeom){
-                    cout<< "!!!!!!hi there im a ballll!!!!!"<<endl;
+                    //cout<< "!!!!!!hi there im a ballll!!!!!"<<endl;
                     x->disable();
-                    points++;
-                    ranNum = ofRandom(0,7);
+                    float ranNum = ofRandom(0,12);
+                    cout<<"Random number "<< ranNum <<endl;
 
-                    if(ranNum < 1){gotTrophy = true;}
-                    if(ranNum < 2){isPoint = true; points+=2;}
-                    if(ranNum > 3 && ranNum < 4){isShield =true; shields++;}
-                    if(ranNum > 4){cout<<"you got nothing haha"<<endl;}
+                    if(ranNum < 0.3 && ranNum > 0){gotTrophy = true;}
+                    if(ranNum < 3 &&ranNum  > 0.3){is2Point = true; points+=2;}
+                    if(ranNum > 3 && ranNum < 6){isShield =true; shields++;}
+                    if(ranNum > 6){isPoint =true; points++;}
 
-                    ofResetElapsedTimeCounter();
 
+                    //ofResetElapsedTimeCounter();
+                    shieldTime = ofGetElapsedTimef();
+                    point2Time = ofGetElapsedTimef();
+                    pointTime = ofGetElapsedTimef();
                     ballCol = true;
                     return;
                 }
@@ -112,6 +127,16 @@ void ofApp::keyPressed(int key){
         fireon =true;
         break;
     case 'f':
+        if(shields > 0){
+            runShield = true;
+            if(shieldPress == true){
+                shields--;
+            }
+            healthTime = ofGetElapsedTimef();
+            loseHealth = false;
+            shieldPress = false;
+            shieldEnd = true;
+        }
         //cannon->ballSetup(cannon->x,cannon->y-5,cannon->z+.6,world,space);
         //shoot =true;
         break;
@@ -229,7 +254,7 @@ void ofApp::level1Setup(){
     if(!ofLoadImage(mGroundTex, "unnamed.png")) { std::cerr << "Failed to load ground texture." << std::endl; }
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    panda = new PandaPlayer(10,-55,1, world, space);
+    panda = new PandaPlayer(0,-64,1, world, space);
     //ball = new Ball(0,0,0,world,space);
 
     /* The light */
@@ -254,7 +279,7 @@ void ofApp::level1Setup(){
     upVector.set(0, 0, 1);
     camera.setAutoDistance(false);
     camera.setNearClip(0.01);
-    camera.setPosition(panda->getX(),-60,3);
+    camera.setPosition(panda->getX(),panda->getY()-5,3);
     camera.lookAt({panda->getX(),panda->getY(),panda->getZ()},upVector);
     camera.setUpAxis(upVector);
 
@@ -340,16 +365,20 @@ void ofApp::level1Update(){
     if(move == true){
         panda->setPosition(panda->getX(),panda->getY()-20,panda->getZ());
         move =false;
+    }if(toStart == true){
+        panda->setPosition(0,-64,1);
+        toStart = false;
     }
     if(ballCol == true){
         ball->setPosition(ball->x, ball->y,-40);
         ballCol = false;
     }
 
+    if(panda->getY() > -60){
     for(auto x : canList){
         x->setSpeed(-.7);
     }
-    cannonLogic();
+    cannonLogic();}
 
 
 
@@ -357,6 +386,14 @@ void ofApp::level1Update(){
 
     }
 
+    if(runShield == true){
+        if(ofGetElapsedTimef() - healthTime > 5){
+            loseHealth = true;
+            shieldPress = true;
+            shieldEnd = false;
+            runShield = false;
+        }
+    }
 
 
     dSpaceCollide (space,0,&nearCallback);
@@ -415,15 +452,24 @@ void ofApp::level1Draw(){
     ofDisableDepthTest();
     camera.end();
 
-    if(ofGetElapsedTimef() > 3){
-        isShield = false;
-        isPoint = false;
+    if(((int) ofGetElapsedTimef() - shieldTime) > 1){
+        if(isShield == true) {isShield = false;}
+    }
+    if(((int) ofGetElapsedTimef() - point2Time) > 1){
+        if(is2Point == true) {is2Point = false;}
+    }
+    if(((int) ofGetElapsedTimef() - pointTime) > 1){
+        if(isPoint == true) {isPoint = false;}
     }
 
     if(isShield == true){
-        upTex.drawString("+1 Shield",10,300);
+        upTex.drawString("+1 Shield",10,360);
+    }if(is2Point == true){
+        upTex.drawString("+3 Point",10,330);
     }if(isPoint == true){
-        upTex.drawString("+3 Point",10,300);
+        upTex.drawString("+1 Point",10,300);
+    }if(shieldEnd == true){
+        upTex.drawString("Shield activated",10,250);
     }
 
     if(gotTrophy == true){
