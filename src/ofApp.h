@@ -29,6 +29,13 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     void collide (dGeomID o1, dGeomID o2);
+    void removeChest();
+
+    void startSetup();
+    void startDraw();
+    void startPress();
+
+    //void reStart();
 
     void level1Setup();
     void level1Update();
@@ -39,6 +46,7 @@ public:
     void end1Draw();
 
     void cannonLogic();
+    void cannonLogic2();
 
     unsigned int keys[65536];
 
@@ -61,6 +69,12 @@ public:
     ofImage shieldIm;
     ofImage pointIm;
     ofImage trophyIm;
+    ofImage startBg;
+    ofImage startSt;
+    ofImage startEn;
+    ofImage endBg;
+    ofImage endEx;
+    ofImage endRe;
     ofTrueTypeFont healthTex;
     ofTrueTypeFont upTex;
     ofTrueTypeFont shieldsTex;
@@ -75,7 +89,11 @@ public:
     //Cannon* cannon;
 
     vector<Cannon*> canList;
+    vector<Cannon*> canList2;
     vector<Chest*> chests;
+
+    bool lvl1ON = true;
+    bool lvl11ON = true;
 
     bool seeBall = false;
     bool fireBall = false;
@@ -89,12 +107,14 @@ public:
     bool isShield = false;
     bool isPoint = false;
     bool is2Point = false;
+    bool isCPoints = false;
     bool gotTrophy = false;
     bool loseHealth = true;
     bool shieldPress = true;
     bool shieldEnd = false;
     bool runShield = false;
     bool toStart = false;
+    bool hasDied = false;
 
     int health = 100;
     int points = 0;
@@ -103,6 +123,9 @@ public:
     int point2Time;
     int shieldTime;
     int healthTime;
+    int cPointTime;
+    int switchLev = 0;
+    int finalScore;
 
     //loat lastTime;
     float currentTime;

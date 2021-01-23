@@ -20,9 +20,6 @@ PandaPlayer::PandaPlayer(float x, float y, float z, dWorldID w, dSpaceID s)
 
     mModel.setScale(scale,scale,scale);
     mModel.setRotation(0,90.0,1,0,0);
-
-    //std::cout << " first x: " << x << std::endl;
-    //std::cout << " first Angle: " << pAngle << std::endl;
 }
 
 void PandaPlayer::setPosition(float x, float y, float z)
@@ -30,7 +27,6 @@ void PandaPlayer::setPosition(float x, float y, float z)
     /* Setter method for position */
     this->x=x; this->y=y; this->z=z;
     dBodySetPosition(mBody, x, y, z);
-    //dGeomSetBody (mGeom, mBody);
 }
 
 void PandaPlayer::setSpeed(float speed){
@@ -43,13 +39,9 @@ void PandaPlayer::setSpeed(float speed){
 
 
     setPosition(thePos[0],thePos[1], thePos[2]);
-
-    //dGeomSetBody (mGeom, mBody);
-    //std::cout << "x: " << x << " y: " << y  << " z: " << z << std::endl;
 }
 
 void PandaPlayer::setZ(float up){
-    //this->z=z;
     if(jump == true && z < 3){
     z+=up;
 
@@ -99,12 +91,6 @@ void PandaPlayer::draw(){
         /* Translate to the correct position: */
         ofTranslate(f[0],f[1],f[2]);
 
-        //cout << " f X "<< f[0]<< " f Y " << f[1] << " f Z " << f[2] << endl;
-
-        /* Rotate by the correct amount: */
-        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
-
-        /* Draw the box */
         ofDrawBox(ss[0],ss[1],ss[2]);
 
         /* Restore the graphics transform stack: */
@@ -114,8 +100,7 @@ void PandaPlayer::draw(){
     ofPushMatrix();
 
     mModel.setPosition(x,y,z-(c_hei/2));
-    //dBodySetPosition(mBody, x, y, z);
-    //dGeomSetBody (mGeom, mBody);
+
     mModel.setRotation(1,pAngle,0,1,0);
 
     mModel.drawFaces();

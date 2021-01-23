@@ -16,15 +16,8 @@ public:
     void disable();
 
     void setPosition(float x, float y, float z);
-    //void setRotY (float pAngle);
-    //void setSpeed(float speed);
-    //void setZ(float z);
-    void draw();
 
-    //float getRotX ();
-    //float getX();
-    //float getY();
-    //float getZ();
+    void draw();
 
     const float c_len=1.5,c_wid=1,c_hei=1;
     float x, y, z;

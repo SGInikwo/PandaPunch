@@ -5,9 +5,6 @@ Chest::Chest(float x, float y, float z, dWorldID w, dSpaceID s)
     /* Set our x,y,z variables */
     this->x=x; this->y=y; this->z=z;
 
-
-
-
     /* Set up physics objects */
     mBody = dBodyCreate(w);
     dBodySetPosition(mBody, x, y, z);
@@ -15,7 +12,6 @@ Chest::Chest(float x, float y, float z, dWorldID w, dSpaceID s)
     dMassAdjust (&mMass,1);
     dBodySetMass (mBody,&mMass);
     mGeom = dCreateBox(s, c_len,c_wid,c_hei);
-    //dGeomSetPosition(mGeom,x,y,z);
     dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
@@ -30,8 +26,6 @@ void Chest::setPosition(float x, float y, float z)
 {
     /* Setter method for position */
     this->x=x; this->y=y; this->z=z;
-    //dBodySetPosition(mBody, x, y, z);
-    //dGeomSetBody (mGeom, mBody);
 }
 
 void Chest::draw(){
@@ -54,12 +48,6 @@ if(gone == false){
         /* Translate to the correct position: */
         ofTranslate(f[0],f[1],f[2]);
 
-        //cout << " f X "<< f[0]<< " f Y " << f[1] << " f Z " << f[2] << endl;
-
-        /* Rotate by the correct amount: */
-        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
-
-        /* Draw the box */
         ofDrawBox(ss[0],ss[1],ss[2]);
 
         /* Restore the graphics transform stack: */
@@ -69,8 +57,7 @@ if(gone == false){
     ofPushMatrix();
 
     mModel.setPosition(x,y,z-.5);
-    //dBodySetPosition(mBody, x, y, z);
-    //dGeomSetBody (mGeom, mBody);
+
     mModel.setRotation(1,pAngle,0,1,0);
 
 
@@ -84,5 +71,4 @@ void Chest::disable(){
     dBodyDisable(mBody);
     dGeomDisable(mGeom);
     gone = true;
-    //dGeomDestroy(mGeom);
 }

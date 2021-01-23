@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.13.3, 2021-01-17T22:54:08. -->
+<!-- Written by QtCreator 4.13.3, 2021-01-19T23:37:06. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -151,10 +151,11 @@
       <valuemap type="QVariantMap" key="Qbs.Configuration">
        <value type="QString" key="qbs.defaultBuildVariant">release</value>
        <value type="QString" key="qbs.profile">qtc_Desktop__80d1e139</value>
+       <value type="bool" key="qbspm.forceProbes">false</value>
       </valuemap>
       <value type="bool" key="Qbs.DryKeepGoing">false</value>
       <value type="bool" key="Qbs.Install">true</value>
-      <value type="int" key="Qbs.MaxJobs">0</value>
+      <value type="int" key="Qbs.MaxJobs">4</value>
       <value type="bool" key="Qbs.ShowCommandLines">false</value>
       <value type="bool" key="Qbs.forceProbesKey">false</value>
      </valuemap>

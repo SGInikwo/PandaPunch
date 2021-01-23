@@ -50,9 +50,6 @@ void Ball::update(){
 }
 
 
-/* Draw method collects latest data from ODE and draws the model at
- * that location/orientation.
- */
 void Ball::draw()
 {
 
@@ -68,10 +65,6 @@ void Ball::draw()
         /* Translate to the correct position: */
         ofTranslate(x,y,z);
 
-        /* Rotate by the correct amount: */
-        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
-
-        /* Draw the box */
         ofDrawSphere(c_rad);
 
         /* Restore the graphics transform stack: */
@@ -79,13 +72,7 @@ void Ball::draw()
     }
     ofPushMatrix();
 
-    //const dReal* thePos = dBodyGetPosition(mBody);
-
-    //setPosition(thePos[0],thePos[1], thePos[2]);
-
-    //std::cout << "x: " << x << " y: " << y  << " z: " << z << std::endl;
     mModel.setPosition(x,y,z);
-    //mModel.setRotation(1,pAngle,0,1,0);
 
     mModel.drawFaces();
 

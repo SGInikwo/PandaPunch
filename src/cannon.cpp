@@ -5,16 +5,8 @@ Cannon::Cannon(float x, float y, float z, dWorldID w, dSpaceID s)
     /* Set our x,y,z variables */
     this->x=x; this->y=y; this->z=z;
 
-    /* Set up physics objects */
-    //mBody = dBodyCreate(w);
-    //dBodySetPosition(mBody, x, y, z);
-    //dBodySetGravityMode(mBody,0);
-    //dMassSetBox (&mMass,1,c_len,c_wid,c_hei);
-    //dMassAdjust (&mMass,0.01);
-    //dBodySetMass (mBody,&mMass);
     mGeom = dCreateBox(s, c_len,c_wid,c_hei);
     dGeomSetPosition(mGeom,x,y,z);
-    //dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
     mModel.loadModel("cannon.dae", 20);
@@ -38,7 +30,7 @@ void Cannon::draw()
     const dReal* thePos = dGeomGetPosition(mGeom);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
-
+if(gone == false){
 //    if(debugDraw) {
 //        dVector3 ss; dQuaternion r;
 //            dGeomBoxGetLengths (mGeom,ss);
@@ -67,12 +59,9 @@ void Cannon::draw()
     ofPushMatrix();
 
     mModel.setPosition(x,y,z-(c_hei/2));
-    //dBodySetPosition(mBody, x, y, z);
-    //dGeomSetBody (mGeom, mBody);
-    //mModel.setRotation(1,pAngle,0,1,0);
 
     mModel.drawFaces();
-
+}
     ofPopMatrix();
 }
 
@@ -109,7 +98,7 @@ void Cannon::drawBall(){
     const dReal* thePos = dBodyGetPosition(bBody);
 
     setBallPosition(thePos[0],thePos[1], thePos[2]);
-
+if(gone == false){
     /* Save the current state of the graphics transform stack: */
     ofPushMatrix();
 
@@ -117,27 +106,28 @@ void Cannon::drawBall(){
     /* Translate to the correct position: */
     ofTranslate(bX,bY,bZ);
 
-    /* Rotate by the correct amount: */
-    //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
-
-    /* Draw the box */
     ofDrawSphere(c_rad);
     ofSetColor(ofColor::white);
-
+}
 
     /* Restore the graphics transform stack: */
     ofPopMatrix();
 }
 
 void Cannon::setSpeed(float speed){
-    bX += sin(0*0.0174532925) * -speed;
-    bY += cos(0*0.0174532925) * speed;
+    bY += speed;
 
     dBodySetPosition(bBody, bX, bY, bZ);
 
     const dReal* thePos = dBodyGetPosition(bBody);
 
     setBallPosition(thePos[0],thePos[1], thePos[2]);
+}
+
+void Cannon::disable(){
+    dGeomDisable(mGeom);
+    dGeomDisable(bGeom);
+    gone = true;
 }
 
 

@@ -15,17 +15,11 @@ public:
 
     void setPosition(float x, float y, float z);
     void setBallPosition(float bX, float bY, float bZ);
-    //void setRotY (float pAngle);
     void setSpeed(float speed);
-    //void setZ(float z);
     void draw();
     void drawBall();
     void ballSetup(float x, float y, float z, dWorldID w, dSpaceID s);
-
-    //float getRotX ();
-    //float getX();
-    //float getY();
-    //float getZ();
+    void disable();
 
     const float c_len=2.5,c_wid=2.5,c_hei=2.3;
     const float c_rad=.4;
@@ -36,6 +30,7 @@ public:
     bool debugDraw = true;
     bool hit = false;
     bool ball = false;
+    bool gone = false;
 
     dReal pAngle = 0;
     dReal pElevation = 0;
