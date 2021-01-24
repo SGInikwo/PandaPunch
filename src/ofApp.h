@@ -80,6 +80,12 @@ public:
     ofTrueTypeFont shieldsTex;
     ofTrueTypeFont pointsTex;
     ofTrueTypeFont endTex;
+    ofSoundPlayer startSound;
+    ofSoundPlayer gameSound;
+    ofColor startBTN = ofColor::white;
+    ofColor quitBTN = ofColor::white;
+    ofColor endSBTN = ofColor::white;
+    ofColor endQBTN = ofColor::white;
 
     dGeomID ground_box;
 
@@ -115,6 +121,10 @@ public:
     bool runShield = false;
     bool toStart = false;
     bool hasDied = false;
+    bool mEntered = true;
+    bool mQuit = true;
+    bool endE = true;
+    bool endQ = true;
 
     int health = 100;
     int points = 0;

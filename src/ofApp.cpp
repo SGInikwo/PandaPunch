@@ -63,6 +63,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     move = true;
                     return;
                 }
+                return;
             }
         }
         if(x->mGeom == o1 || x->mGeom == o2){
@@ -101,6 +102,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     move = true;
                     return;
                 }
+                return;
             }
         }
         if(x->mGeom == o1 || x->mGeom == o2){
@@ -222,7 +224,43 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
+    if(switchLev == 0){
+        if(x > (ofGetWindowWidth()/2) -200 && x < 720 && y > ((ofGetWindowHeight()/2) - 130) && y < (ofGetWindowHeight()/2) -10){
+            if(mEntered == true){
+                startSound.play();
+                startBTN = ofColor::gray;
+                mEntered = false;
+            }
+        }else{mEntered = true; startBTN = ofColor::white;}
 
+        if(x > (ofGetWindowWidth()/2) -200 && x < 720 && y > ((ofGetWindowHeight()/2)) && y < (ofGetWindowHeight()/2) +120){
+            if(mQuit == true){
+                startSound.play();
+                quitBTN = ofColor::gray;
+                mQuit = false;
+            }
+        }else{mQuit = true; quitBTN = ofColor::white;}
+    }
+
+    if(switchLev == 11){
+        if(x > 300 && x < 370 && y > 550 && y < 620){
+            if(endE == true){
+                startSound.play();
+                endSBTN = ofColor::gray;
+                endE = false;
+            }
+
+        }else{endE = true; endSBTN = ofColor::white;}
+
+        if(x > 550 && x < 755 && y > 550 && y < 610){
+            if(endQ == true){
+                startSound.play();
+                endQBTN = ofColor::gray;
+                endQ = false;
+            }
+        }else{endQ = true; endQBTN = ofColor::white;}
+
+    }
 }
 
 //--------------------------------------------------------------
@@ -351,7 +389,6 @@ void ofApp::level1Setup(){
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
     bgImage.load("thunderstorm-3625405_1920.jpg");
 
-
     // create world
     dInitODE2(0);
     world = dWorldCreate();
@@ -435,6 +472,10 @@ void ofApp::level1Setup(){
         x->ballSetup(x->x,x->y-5,x->z+.6,world,space);
     }
 
+    gameSound.load("FunkFromTheTrunk-FULL.mp3");
+    gameSound.setLoop(true);
+    gameSound.play();
+
     shieldIm.load("shield.png");
     pointIm.load("bamboo.png");
     trophyIm.load("trophy.png");
@@ -447,6 +488,7 @@ void ofApp::level1Setup(){
     pointIm.resize(70,70);
     shieldIm.resize(100,100);
     trophyIm.resize(113,120);
+    ofResetElapsedTimeCounter();
 }
 
 void ofApp::level1Update(){
@@ -457,14 +499,14 @@ void ofApp::level1Update(){
         hasDied = true;
         lvl1ON = true;
         finalScore = ofGetElapsedTimef();
-        cout<<finalScore<<endl;
+        cout<< "My Score " <<finalScore<<endl;
     }
 
     if(panda->getY() > 66){
         switchLev = 11;
         lvl1ON = true;
         finalScore = ofGetElapsedTimef();
-        cout<<finalScore<<endl;
+        cout<<"My score " << finalScore<<endl;
     }
 
     /* Handle the keys: */
@@ -645,12 +687,17 @@ void ofApp::startSetup(){
     startBg.load("planet-2120004_1920.jpg");
     startSt.load("Start_BTN.png");
     startEn.load("Exit_BTN.png");
+
+    startSound.load("zapsplat_multimedia_game_zap_laser_006_24951.mp3");
 }
 
 void ofApp::startDraw(){
     startBg.draw(0,0);
+    ofSetColor(startBTN);
     startSt.draw((ofGetWindowWidth()/2)-200,ofGetWindowHeight()/2 -130);
+    ofSetColor(quitBTN);
     startEn.draw((ofGetWindowWidth()/2)-200,(ofGetWindowHeight()/2));
+    ofSetColor(ofColor::white);
 }
 
 //--------------------------------------------------------------
@@ -697,16 +744,23 @@ void ofApp::end1Draw(){
     ofSetColor(ofColor::white);
     endBg.draw(0,0);
 
+    endSBTN = ofColor::white;
     endRe.draw(300, 550);
+    endQBTN = ofColor::white;
     endEx.draw(550,550);
 
+    float score = (float) points/finalScore;
+    float endScore = (float) score*100;
+    ofSetColor(ofColor::white);
+
+    ofSetColor(255,122,220);
     if(points >= 20 && hasDied == false){
-        endTex.drawString("Congrats, \nYou got a score of \n" + ofToString(points/finalScore), (ofGetWindowWidth()/2)-300,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("Congrats, \nYou got a score of \n" + ofToString(endScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     }
     if(points < 20 && hasDied == false){
-        endTex.drawString("Unfortunately \nyou didn't make it, \nYou got a score of \n" + ofToString(points/finalScore), (ofGetWindowWidth()/2)-300,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("Unfortunately \nyou didn't make it, \nYou got a score of \n" + ofToString(endScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     } if(hasDied == true){
-        endTex.drawString("You died, \nYou got a score of \n" + ofToString(points/finalScore), (ofGetWindowWidth()/2)-300,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("You died, \nYou got a score of \n" + ofToString(endScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     }
 }
 
