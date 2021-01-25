@@ -64,7 +64,6 @@ public:
     ofPlanePrimitive mGround;
     ofTexture mGroundTex;
     ofEasyCam camera;
-    ofCamera cam;
     ofLight light;
     ofLight light2;
     ofLight light3;

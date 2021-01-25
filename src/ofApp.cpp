@@ -521,6 +521,7 @@ void ofApp::level1Update(){
     /* When you get to the end or die go to ending screen */
     if(health <= 0){
         switchLev = 11;
+        camera.~ofEasyCam();
         hasDied = true;
         lvl1ON = true;
         finalScore = ofGetElapsedTimef();
@@ -529,6 +530,7 @@ void ofApp::level1Update(){
 
     if(panda->getY() > 66){
         switchLev = 11;
+        camera.~ofEasyCam();
         lvl1ON = true;
         finalScore = ofGetElapsedTimef();
         cout<<"My score " << finalScore<<endl;
