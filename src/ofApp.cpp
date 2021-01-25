@@ -79,6 +79,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     cout<<"cannon1 My health " << health << endl;
                     return;
                 }
+                return;
             }
             if(fireBall == true){
                 if(ball->mGeom == o1|| ball->mGeom == o2){
@@ -124,6 +125,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     cout<<"cannon 2 My health " << health << endl;
                     return;
                 }
+                return;
             }
             if(fireBall == true){
                 if(ball->mGeom == o1|| ball->mGeom == o2){
@@ -146,8 +148,12 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
     for(auto x: chests){
         if(x->mGeom == o1 || x->mGeom == o2){
             if( panda->mGeom == o1 || panda->mGeom == o2){
-                move = true;
-                if(loseHealth == true) {health-=1; cout<<"chest My health " << health << endl;}
+                if(loseHealth == true) {
+                    move = true;
+                    health-=1;
+                    cout<<"chest My health " << health << endl;
+                    return;
+                }
                 return;
             }
             if(fireBall == true){
@@ -197,10 +203,13 @@ void ofApp::keyPressed(int key){
         keys[key] = 1;
         switch(key) {
         case 'k': case 'K':
-            ball = new Ball(panda->getX()+.78,panda->getY()+(.47),panda->getZ()+.1,world,space);
-            seeBall = true;
-            fireBall = true;
-            fireon =true;
+            if(isBall == true){
+                ball = new Ball(panda->getX()+.78,panda->getY()+(.47),panda->getZ()+.1,world,space);
+                seeBall = true;
+                fireBall = true;
+                fireon =true;
+                isBall = false;
+            }
             break;
         case 'j': case 'J':
             if(shields > 0){
@@ -307,6 +316,7 @@ void ofApp::mousePressed(int x, int y, int button){
                 canList.clear();
                 canList2.clear();
                 chests.clear();
+                isBall = true;
                 cheat = false;
                 hasDied = false;
                 gotTrophy = false;
@@ -474,7 +484,7 @@ void ofApp::level1Setup(){
     ranX2[2] = ofRandom(12,21);
 
 
-    for(unsigned int p=0; p<40; p++) {
+    for(unsigned int p=0; p<70; p++) {
         chests.push_back(new Chest(ofRandom(-21,21),ofRandom(-55,55), 1, world, space) );
     }
 
@@ -521,7 +531,6 @@ void ofApp::level1Update(){
     /* When you get to the end or die go to ending screen */
     if(health <= 0){
         switchLev = 11;
-        camera.~ofEasyCam();
         hasDied = true;
         lvl1ON = true;
         finalScore = ofGetElapsedTimef();
@@ -530,7 +539,6 @@ void ofApp::level1Update(){
 
     if(panda->getY() > 66){
         switchLev = 11;
-        camera.~ofEasyCam();
         lvl1ON = true;
         finalScore = ofGetElapsedTimef();
         cout<<"My score " << finalScore<<endl;
@@ -543,7 +551,7 @@ void ofApp::level1Update(){
     if (keys[OF_KEY_RIGHT] || keys['d']){
         panda->setRotY(-3);
     }
-    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.145); panda->mModel.playAllAnimations();
+    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.245); panda->mModel.playAllAnimations();
         panda->mModel.update();
     }
     if(keys[32]){
@@ -567,6 +575,7 @@ void ofApp::level1Update(){
         if(((ball->y-panda->getY()) > 7) || ((ball->y-panda->getY()) < -7) || ((ball->x-panda->getX()) >7) || ((ball->x-panda->getX()) < -7) ){
             ball->~Ball();
             fireBall = false;
+            isBall = true;
         }
     }
 
@@ -586,14 +595,14 @@ void ofApp::level1Update(){
     /* Cannon shoot when the panda is past a specific point */
     if(panda->getY() > -60){
         for(auto x : canList){
-            x->setSpeed(-.5);
+            x->setSpeed(-.6);
         }
 
         cannonLogic();
     }
     if(panda->getY() > 2){
         for(auto x : canList2){
-            x->setSpeed(-.5);
+            x->setSpeed(-.6);
         }
         cannonLogic2();
     }

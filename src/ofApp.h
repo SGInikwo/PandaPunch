@@ -127,6 +127,7 @@ public:
     bool mQuit = true;
     bool endE = true;
     bool endQ = true;
+    bool isBall = true;
     bool cheat = false;
 
     int switchLev = 0;
