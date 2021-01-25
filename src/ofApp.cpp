@@ -31,9 +31,7 @@ void ofApp::draw(){
     /* Which screen to draw */
     if(switchLev == 0) startDraw();
     if(switchLev == 1) level1Draw();
-    if(switchLev == 11){
-        end1Draw();
-    }
+    if(switchLev == 11) end1Draw();
 }
 
 //--------------------------------------------------------------
@@ -309,6 +307,7 @@ void ofApp::mousePressed(int x, int y, int button){
                 canList.clear();
                 canList2.clear();
                 chests.clear();
+                cheat = false;
                 hasDied = false;
                 gotTrophy = false;
                 lvl11ON = true;
