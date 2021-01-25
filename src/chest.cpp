@@ -29,31 +29,29 @@ void Chest::setPosition(float x, float y, float z)
 }
 
 void Chest::draw(){
+    /* Draw objects */
     const dReal* thePos = dBodyGetPosition(mBody);
-
 
     setPosition(thePos[0],thePos[1], thePos[2]);
 
 if(gone == false){
-    if(debugDraw) {
+    if(!debugDraw) {
+        /* Draw geom body */
         dVector3 ss; dQuaternion r;
-            dGeomBoxGetLengths (mGeom,ss);
-            dGeomGetQuaternion(mGeom,r);
-            const dReal* f = dGeomGetPosition(mGeom);
+        dGeomBoxGetLengths (mGeom,ss);
+        dGeomGetQuaternion(mGeom,r);
+        const dReal* f = dGeomGetPosition(mGeom);
 
         ofSetColor(ofColor::white,128);
-        /* Save the current state of the graphics transform stack: */
         ofPushMatrix();
 
-        /* Translate to the correct position: */
         ofTranslate(f[0],f[1],f[2]);
-
         ofDrawBox(ss[0],ss[1],ss[2]);
 
-        /* Restore the graphics transform stack: */
         ofPopMatrix();
     }
 
+    /* Draw 3d Model */
     ofPushMatrix();
 
     mModel.setPosition(x,y,z-.5);
@@ -61,8 +59,8 @@ if(gone == false){
     mModel.setRotation(1,pAngle,0,1,0);
 
 
-        mModel.drawFaces();
-    }
+    mModel.drawFaces();
+}
 
     ofPopMatrix();
 }

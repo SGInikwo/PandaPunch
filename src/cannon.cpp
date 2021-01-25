@@ -27,35 +27,29 @@ void Cannon::setPosition(float x, float y, float z)
 
 void Cannon::draw()
 {
+    /* Draw objects */
     const dReal* thePos = dGeomGetPosition(mGeom);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
+
 if(gone == false){
-//    if(debugDraw) {
-//        dVector3 ss; dQuaternion r;
-//            dGeomBoxGetLengths (mGeom,ss);
-//            dGeomGetQuaternion(mGeom,r);
-//            const dReal* f = dGeomGetPosition(mGeom);
+    if(!debugDraw) {
+        /* Draw geom body */
+        dVector3 ss; dQuaternion r;
+        dGeomBoxGetLengths (mGeom,ss);
+        dGeomGetQuaternion(mGeom,r);
+        const dReal* f = dGeomGetPosition(mGeom);
 
-//        ofSetColor(ofColor::white,128);
-//        /* Save the current state of the graphics transform stack: */
-//        ofPushMatrix();
+        ofSetColor(ofColor::white,128);
+        ofPushMatrix();
 
-//        /* Translate to the correct position: */
-//        ofTranslate(f[0],f[1],f[2]);
+        ofTranslate(f[0],f[1],f[2]);
+        ofDrawBox(ss[0],ss[1],ss[2]);
 
-//        //cout << " f X "<< f[0]<< " f Y " << f[1] << " f Z " << f[2] << endl;
+        ofPopMatrix();
+    }
 
-//        /* Rotate by the correct amount: */
-//        //ofRotateDeg(rotationAmount, rotationAngle.x, rotationAngle.y, rotationAngle.z);
-
-//        /* Draw the box */
-//        ofDrawBox(ss[0],ss[1],ss[2]);
-
-//        /* Restore the graphics transform stack: */
-//        ofPopMatrix();
-//    }
-
+    /* Draw 3d Model */
     ofPushMatrix();
 
     mModel.setPosition(x,y,z-(c_hei/2));

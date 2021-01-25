@@ -31,17 +31,18 @@ public:
     void collide (dGeomID o1, dGeomID o2);
     void removeChest();
 
+    /* Start screen */
     void startSetup();
     void startDraw();
     void startPress();
 
-    //void reStart();
-
+    /* 1st level */
     void level1Setup();
     void level1Update();
     void level1Draw();
     void level1Exit();
 
+    /* Ending screen */
     void end1Setup();
     void end1Draw();
 
@@ -50,16 +51,20 @@ public:
 
     unsigned int keys[65536];
 
-    /* These variables are straight from demo_buggy.cpp */
+    /* ODE objects */
+    dJointGroupID contactgroup;
     dWorldID world;
     dSpaceID space;
-    dJointGroupID contactgroup ;
     dGeomID ground;
+    dGeomID lGroundln;
+    dGeomID rGroundln;
+    dGeomID finishln;
 
-    ofEasyCam camera;
-    ofCamera cam;
+    /* OF objects */
     ofPlanePrimitive mGround;
     ofTexture mGroundTex;
+    ofEasyCam camera;
+    ofCamera cam;
     ofLight light;
     ofLight light2;
     ofLight light3;
@@ -87,17 +92,15 @@ public:
     ofColor endSBTN = ofColor::white;
     ofColor endQBTN = ofColor::white;
 
-    dGeomID ground_box;
-
-    /* A vector of pallets */
+    /* 3D objects */
     PandaPlayer* panda;
     Ball* ball;
-    //Cannon* cannon;
 
     vector<Cannon*> canList;
     vector<Cannon*> canList2;
     vector<Chest*> chests;
 
+    /* Level boolean */
     bool lvl1ON = true;
     bool lvl11ON = true;
 
@@ -125,20 +128,18 @@ public:
     bool mQuit = true;
     bool endE = true;
     bool endQ = true;
+    bool cheat = false;
 
+    int switchLev = 0;
     int health = 100;
-    int points = 0;
     int shields = 0;
+    int points = 0;
     int pointTime;
     int point2Time;
     int shieldTime;
     int healthTime;
     int cPointTime;
-    int switchLev = 0;
     int finalScore;
-
-    //loat lastTime;
-    float currentTime;
 };
 
 static void nearCallback (void *, dGeomID o1, dGeomID o2);

@@ -13,30 +13,29 @@ class Chest
 {
 public:
     Chest(float x, float y, float z, dWorldID w, dSpaceID s);
-    void disable();
 
+    /* Methods */
     void setPosition(float x, float y, float z);
-
+    void disable();
     void draw();
 
-    const float c_len=1.5,c_wid=1,c_hei=1;
-    float x, y, z;
-    float speed;
-
-    bool debugDraw = true;
-    bool hit = false;
-    bool gone = false;
-
-    dReal pAngle = 0;
-    dReal pElevation = 0;
-
     /* ODE objects */
+    dReal pElevation = 0;
+    dReal pAngle = 0;
     dBodyID mBody;
     dGeomID mGeom;
     dMass   mMass;
 
     /* The 3D model */
     ofxAssimpModelLoader mModel;
+
+    bool debugDraw = true;
+    bool hit = false;
+    bool gone = false;
+
+    const float c_len=1.5,c_wid=1,c_hei=1;
+    float x, y, z;
+    float speed;
 };
 
 #endif // CHEST_H

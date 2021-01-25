@@ -1,14 +1,15 @@
 #include "ofApp.h"
 
-static const dVector3 yunit = { 0, 1, 0 }, zunit = { 0, 0, 1 };
 //--------------------------------------------------------------
 void ofApp::setup(){
+    /* Start screen */
     ofSetFrameRate(60);
-    if(switchLev ==0) startSetup();
+    if(switchLev == 0) startSetup();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    /* Making sure the setup is called once */
     if(switchLev == 1){
         if(lvl1ON == true){
             lvl1ON = false;
@@ -27,6 +28,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    /* Which screen to draw */
     if(switchLev == 0) startDraw();
     if(switchLev == 1) level1Draw();
     if(switchLev == 11){
@@ -49,6 +51,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 {
     int i,n;
 
+    /* Collision of first row of cannon with either panda and his punch */
     for(auto x: canList){
         if(x->bGeom == o1 || x->bGeom == o2){
             for(auto y : chests){
@@ -64,6 +67,10 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     return;
                 }
                 return;
+            }if(fireBall == true){
+                if(ball->mGeom == o1|| ball->mGeom == o2){
+                    return;
+                }
             }
         }
         if(x->mGeom == o1 || x->mGeom == o2){
@@ -83,11 +90,13 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 
                     cPointTime = ofGetElapsedTimef();
                     ballCol = true;
+                    return;
                 }
             }
         }
     }
 
+    /* Collision of second row cannons with either panda and his punch */
     for(auto x: canList2){
         if(x->bGeom == o1 || x->bGeom == o2){
             for(auto y : chests){
@@ -103,6 +112,10 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     return;
                 }
                 return;
+            }if(fireBall == true){
+                if(ball->mGeom == o1|| ball->mGeom == o2){
+                    return;
+                }
             }
         }
         if(x->mGeom == o1 || x->mGeom == o2){
@@ -123,6 +136,7 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
 
                     cPointTime = ofGetElapsedTimef();
                     ballCol = true;
+                    return;
                 }
             }
         }
@@ -130,16 +144,16 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
     }
 
 
-    /* Collision with chest and either panda and his punch */
+    /* Collision of chest with either panda and his punch */
     for(auto x: chests){
-        if(o2 == x->mGeom){
-            if( o1 == panda->mGeom){
+        if(x->mGeom == o1 || x->mGeom == o2){
+            if( panda->mGeom == o1 || panda->mGeom == o2){
                 move = true;
                 if(loseHealth == true) {health-=1; cout<<"chest My health " << health << endl;}
                 return;
             }
             if(fireBall == true){
-                if(o1 == ball->mGeom){
+                if(ball->mGeom == o1 || ball->mGeom == o2){
                     x->disable();
                     float ranNum = ofRandom(0,12);
                     cout<<"Random number "<< ranNum <<endl;
@@ -149,8 +163,6 @@ void ofApp::collide(dGeomID o1, dGeomID o2)
                     if(ranNum > 3 && ranNum < 6){isShield =true; shields++;}
                     if(ranNum > 6){isPoint =true; points++;}
 
-
-                    //ofResetElapsedTimeCounter();
                     shieldTime = ofGetElapsedTimef();
                     point2Time = ofGetElapsedTimef();
                     pointTime = ofGetElapsedTimef();
@@ -186,13 +198,13 @@ void ofApp::keyPressed(int key){
     if(switchLev == 1){
         keys[key] = 1;
         switch(key) {
-        case 'r':
+        case 'k': case 'K':
             ball = new Ball(panda->getX()+.78,panda->getY()+(.47),panda->getZ()+.1,world,space);
             seeBall = true;
             fireBall = true;
             fireon =true;
             break;
-        case 'f':
+        case 'j': case 'J':
             if(shields > 0){
                 runShield = true;
                 if(shieldPress == true){
@@ -204,8 +216,15 @@ void ofApp::keyPressed(int key){
                 shieldEnd = true;
             }
             break;
-        case 'q':
-            level1Exit();
+        case 'p':  case 'P':
+            cheat = true;
+            cout<<"Cheats activated"<<endl;
+            break;
+        case 'o':  case 'O':
+            cheat = false;
+            cout<<"Cheats Deactivated"<<endl;
+            break;
+        case 'q':  case 'Q':
             ofExit();
             break;
         }
@@ -272,14 +291,10 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
     if(switchLev == 0){
         if(button == 0){
-            cout << "clicked"<<endl;
             if(mouseX > (ofGetWindowWidth()/2) -200 && mouseX < 720 && mouseY > ((ofGetWindowHeight()/2) - 130) && mouseY < (ofGetWindowHeight()/2) -10){
                 switchLev = 1;
-                cout << "hi there"<<endl;
             }if(mouseX > (ofGetWindowWidth()/2) -200 && mouseX < 720 && mouseY > ((ofGetWindowHeight()/2)) && mouseY < (ofGetWindowHeight()/2) +120){
-                level1Exit();
                 ofExit();
-                cout << "ho there"<<endl;
             }
         }
     }
@@ -287,18 +302,18 @@ void ofApp::mousePressed(int x, int y, int button){
     if(switchLev == 11){
         if(button == 0){
             if(mouseX > 300 && mouseX < 370 && mouseY > 550 && mouseY < 620){
-                cout << "clicked"<< endl;
                 shields = 0;
                 points = 0;
                 health = 100;
                 switchLev =1;
+                canList.clear();
+                canList2.clear();
+                chests.clear();
                 hasDied = false;
                 gotTrophy = false;
                 lvl11ON = true;
 
             }if(mouseX > 550 && mouseX < 755 && mouseY > 550 && mouseY < 610){
-                cout << "re"<< endl;
-                level1Exit();
                 ofExit();
             }
         }
@@ -337,6 +352,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::cannonLogic(){
+    /* First row of cannon logic their movement */
     int i =0;
     for(auto x : canList){
         float ranX[3];
@@ -356,10 +372,10 @@ void ofApp::cannonLogic(){
         }
         i++;
     }
-
 }
 
 void ofApp::cannonLogic2(){
+    /* Second row of cannon logic their movement */
     int j =0;
     for(auto x : canList2){
         float ranX[3];
@@ -385,7 +401,6 @@ void ofApp::level1Setup(){
     ofResetElapsedTimeCounter();
     ofDisableArbTex();
 
-    // panda = new PandaPlayer(0,0,5, world, space);
     for(unsigned int i=0; i<65536; i++) keys[i] = 0;
     bgImage.load("thunderstorm-3625405_1920.jpg");
 
@@ -396,7 +411,6 @@ void ofApp::level1Setup(){
     contactgroup = dJointGroupCreate (0);
     dWorldSetGravity (world,0,0,-0.5);
     ground = dCreatePlane (space,0,0,1,0);
-
 
     dAllocateODEDataForThread(dAllocateMaskAll);
 
@@ -409,7 +423,14 @@ void ofApp::level1Setup(){
     mGroundTex.setTextureWrap(GL_REPEAT, GL_REPEAT);
 
     panda = new PandaPlayer(0,-64,1, world, space);
-    //ball = new Ball(0,0,0,world,space);
+
+    /* Boundaries */
+    lGroundln = dCreateBox(space,1,256,1);
+    dGeomSetPosition (lGroundln,-23,0,-.49);
+    rGroundln = dCreateBox(space,1,256,1);
+    dGeomSetPosition (rGroundln,23,0,-.49);
+    finishln = dCreateBox(space,46,1,1);
+    dGeomSetPosition(finishln,0,66,-.49);
 
     /* The light */
     light.setPointLight();
@@ -429,6 +450,7 @@ void ofApp::level1Setup(){
     light3.lookAt(glm::vec3(0,8,0));
     light3.enable();
 
+    /* camera */
     ofVec3f upVector;
     upVector.set(0, 0, 1);
     camera.setAutoDistance(false);
@@ -439,6 +461,7 @@ void ofApp::level1Setup(){
     camera.disableMouseInput();
     camera.disableMouseMiddleButton();
 
+    /* Setting random positions */
     float ranX[3];
 
     ranX[0] = ofRandom(-21,-12);
@@ -464,6 +487,7 @@ void ofApp::level1Setup(){
         canList2.push_back((new Cannon(ranX2[p], 50, 1.2, world, space)));
     }
 
+    /* Setting the positions of the ball of the cannons */
     for(auto x : canList ){
         x->ballSetup(x->x,x->y-5,x->z+.6,world,space);
     }
@@ -472,6 +496,7 @@ void ofApp::level1Setup(){
         x->ballSetup(x->x,x->y-5,x->z+.6,world,space);
     }
 
+    /* Loading sound, images and font */
     gameSound.load("FunkFromTheTrunk-FULL.mp3");
     gameSound.setLoop(true);
     gameSound.play();
@@ -494,6 +519,7 @@ void ofApp::level1Setup(){
 void ofApp::level1Update(){
     removeChest();
 
+    /* When you get to the end or die go to ending screen */
     if(health <= 0){
         switchLev = 11;
         hasDied = true;
@@ -516,7 +542,7 @@ void ofApp::level1Update(){
     if (keys[OF_KEY_RIGHT] || keys['d']){
         panda->setRotY(-3);
     }
-    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.445); panda->mModel.playAllAnimations();
+    if (keys[OF_KEY_UP] || keys['w']){ panda->setSpeed(0.145); panda->mModel.playAllAnimations();
         panda->mModel.update();
     }
     if(keys[32]){
@@ -528,6 +554,7 @@ void ofApp::level1Update(){
 
     light.lookAt(glm::vec3(panda->getX(),panda->getY(),panda->getZ()));
 
+    /* What to do when the ball is in the world */
     if(fireBall == true) {
         if(fireon == true){
             ball->setRotY(panda->pAngle);
@@ -542,6 +569,7 @@ void ofApp::level1Update(){
         }
     }
 
+    /* Resetting the panda or ball */
     if(move == true){
         panda->setPosition(ofRandom(panda->getX()-5,panda->getX()+5),panda->getY()-10,panda->getZ());
         move =false;
@@ -554,31 +582,34 @@ void ofApp::level1Update(){
         ballCol = false;
     }
 
+    /* Cannon shoot when the panda is past a specific point */
     if(panda->getY() > -60){
         for(auto x : canList){
-            x->setSpeed(-.7);
+            x->setSpeed(-.5);
         }
 
         cannonLogic();
     }
     if(panda->getY() > 2){
         for(auto x : canList2){
-            x->setSpeed(-.7);
+            x->setSpeed(-.5);
         }
         cannonLogic2();
     }
 
-
-
-    if(panda->getX() >= 32){
-        toStart = true;
-    }if( panda->getX() < -32){
-        toStart = true;
+    /* Panda's boundaries */
+    if(cheat == false){
+        if(panda->getX() >= 23){
+            toStart = true;
+        }if( panda->getX() < -23){
+            toStart = true;
+        }
     }
     if(panda->getY() < -70){
         toStart = true;
     }
 
+    /* Shield logic */
     if(runShield == true){
         if(ofGetElapsedTimef() - healthTime > 5){
             loseHealth = true;
@@ -598,7 +629,7 @@ void ofApp::level1Update(){
 
 //--------------------------------------------------------------
 void ofApp::level1Draw(){
-    // draw the scene
+    /* Draw the scene */
     bgImage.draw(0,0);
     ofSetColor(ofColor::white);
     healthTex.drawString("Health: " + ofToString(health) ,0,20);
@@ -614,7 +645,6 @@ void ofApp::level1Draw(){
 
     camera.begin();
 
-
     ofEnableDepthTest();
 
     ofPushMatrix();
@@ -625,10 +655,39 @@ void ofApp::level1Draw(){
     mGround.draw();
     mGroundTex.unbind();
 
+    /* Boundaries */
+    const dReal* llP = dGeomGetPosition(lGroundln);
+    const dReal* rrP = dGeomGetPosition(rGroundln);
+    const dReal* fnP = dGeomGetPosition(finishln);
+    dVector3 ll; dVector3 rr; dVector3 ff;
+    dGeomBoxGetLengths (lGroundln,ll);
+    dGeomBoxGetLengths (rGroundln,rr);
+    dGeomBoxGetLengths(finishln,ff);
+
+    /* Left side line */
+    ofPushMatrix();
+    ofSetColor(ofColor::red);
+    ofTranslate(llP[0],llP[1],llP[2]);
+    ofDrawBox(ll[0],ll[1],ll[2]);
+    ofPopMatrix();
+    /* Rightside line */
+    ofPushMatrix();
+    ofSetColor(ofColor::red);
+    ofTranslate(rrP[0],rrP[1],rrP[2]);
+    ofDrawBox(rr[0],rr[1],rr[2]);
+    ofPopMatrix();
+    /* Finish line */
+    ofPushMatrix();
+    ofSetColor(ofColor::red);
+    ofTranslate(fnP[0],fnP[1],fnP[2]);
+    ofDrawBox(ff[0],ff[1],ff[2]);
+    ofPopMatrix();
+
+    /* Draw panda ball chests cannons */
+    ofSetColor(ofColor::white);
     panda->draw();
     if(seeBall) ball->draw();
 
-    /* Draw the pallets */
     for(auto x: chests ) x->draw();
 
 
@@ -646,6 +705,7 @@ void ofApp::level1Draw(){
     ofDisableDepthTest();
     camera.end();
 
+    /* The text you see pop up on the screen */
     if(((int) ofGetElapsedTimef() - shieldTime) > 1){
         if(isShield == true) {isShield = false;}
     }
@@ -684,6 +744,7 @@ void ofApp::level1Draw(){
 }
 //--------------------------------------------------------------
 void ofApp::startSetup(){
+    /* Start screen */
     startBg.load("planet-2120004_1920.jpg");
     startSt.load("Start_BTN.png");
     startEn.load("Exit_BTN.png");
@@ -702,6 +763,7 @@ void ofApp::startDraw(){
 
 //--------------------------------------------------------------
 void ofApp::level1Exit(){
+    /* What to do at exit */
     for(auto x : canList){
         dGeomDestroy(x->mGeom);
         dGeomDestroy(x->bGeom);
@@ -714,8 +776,11 @@ void ofApp::level1Exit(){
     for(auto x : chests){
         dGeomDestroy(x->mGeom);
     }
-    dGeomDestroy(ball->mGeom);
+    canList.clear();
+    canList2.clear();
+    chests.clear();
     dGeomDestroy(panda->mGeom);
+    if(fireBall) dGeomDestroy(ball->mGeom);
     dJointGroupDestroy (contactgroup);
     dSpaceDestroy (space);
     dWorldDestroy (world);
@@ -724,6 +789,7 @@ void ofApp::level1Exit(){
 
 //--------------------------------------------------------------
 void ofApp::end1Setup(){
+    /* Ending screen */
     ofSetColor(ofColor::white);
     endBg.load("planet-2120004_1920.jpg");
     endRe.load("Replay_BTN.png");
@@ -732,12 +798,6 @@ void ofApp::end1Setup(){
     endRe.resize(70,70);
     endEx.resize(205,60);
     ofSetColor(ofColor::white);
-
-
-//    light4.setPointLight();
-//    light4.setPosition(20,0,0);
-//    light4.lookAt(glm::vec3(0,0,20));
-//    light4.enable();
 }
 
 void ofApp::end1Draw(){
@@ -751,20 +811,22 @@ void ofApp::end1Draw(){
 
     float score = (float) points/finalScore;
     float endScore = (float) score*100;
+    int theScore = (int) endScore;
     ofSetColor(ofColor::white);
 
     ofSetColor(255,122,220);
     if(points >= 20 && hasDied == false){
-        endTex.drawString("Congrats, \nYou got a score of \n" + ofToString(endScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("Congrats, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     }
     if(points < 20 && hasDied == false){
-        endTex.drawString("Unfortunately \nyou didn't make it, \nYou got a score of \n" + ofToString(endScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("Unfortunately \nyou didn't make it, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     } if(hasDied == true){
-        endTex.drawString("You died, \nYou got a score of \n" + ofToString(endScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("You died, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     }
 }
 
 void ofApp::removeChest(){
+    /* This removes the chests at specific locations */
     for(auto x : chests){
         if(x->y > -7 && x->y < 3){
             x->disable();
@@ -780,5 +842,3 @@ void ofApp::removeChest(){
         }
     }
 }
-
-

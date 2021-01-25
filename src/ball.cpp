@@ -16,14 +16,15 @@ Ball::Ball(float x, float y, float z, dWorldID w, dSpaceID s)
     dGeomSetBody (mGeom, mBody);
 
     /* Set up graphics objects */
-    mModel.loadModel("ball.dae", 20);
+    mModel.loadModel("ball2.dae", 20);
     double scale = .5/ mModel.getNormalizedScale();
 
-    mModel.setScale(scale,scale*.5,scale);
+    mModel.setScale(scale,scale,scale);
     mModel.setRotation(0,90.0,1,0,0);
 }
 
 void Ball::setSpeed(float speed){
+    /* Set speed of the ball */
     x += sin(pAngle*0.0174532925) * -speed;
     y += cos(pAngle*0.0174532925) * speed;
 
@@ -35,6 +36,7 @@ void Ball::setSpeed(float speed){
 }
 
 void Ball::setRotY (float pAngle){
+    /* Update angle */
     this->pAngle += pAngle;
 }
 
@@ -46,30 +48,29 @@ void Ball::setPosition(float x, float y, float z)
 }
 
 void Ball::update(){
+    /* Update body */
     dBodySetPosition(mBody, x, y, z);
 }
 
 
 void Ball::draw()
 {
-
+    /* Draw object */
     const dReal* thePos = dBodyGetPosition(mBody);
 
     setPosition(thePos[0],thePos[1], thePos[2]);
 
     if(!debugDraw) {
+        /* Draw geom boddy */
         ofSetColor(ofColor::white,128);
-        /* Save the current state of the graphics transform stack: */
         ofPushMatrix();
 
-        /* Translate to the correct position: */
         ofTranslate(x,y,z);
-
         ofDrawSphere(c_rad);
 
-        /* Restore the graphics transform stack: */
         ofPopMatrix();
     }
+    /* Draw 3d Model */
     ofPushMatrix();
 
     mModel.setPosition(x,y,z);
@@ -80,6 +81,7 @@ void Ball::draw()
 }
 
 Ball::~Ball(){
+    /* Disable geom and body */
     dBodyDisable(mBody);
     dGeomDisable(mGeom);
 }
