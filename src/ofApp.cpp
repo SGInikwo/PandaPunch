@@ -819,7 +819,7 @@ void ofApp::end1Draw(){
         endTex.drawString("Congrats, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     }
     if(points < 20 && hasDied == false){
-        endTex.drawString("Unfortunately \nyou didn't make it, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
+        endTex.drawString("Unfortunately, \nYou didn't make it, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     } if(hasDied == true){
         endTex.drawString("You died, \nYou got a score of \n" + ofToString(theScore), (ofGetWindowWidth()/2)-250,(ofGetWindowHeight()/2)-100);
     }
@@ -832,7 +832,7 @@ void ofApp::removeChest(){
             x->disable();
             cout<<"goodby 10"<<endl;
         }
-        if(x->y > 50 ){
+        if(x->y > 46 ){
             x->disable();
             cout<<"goodby 50"<<endl;
         }
