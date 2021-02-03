@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by QtCreator 4.11.0, 2021-01-25T05:41:24. -->
+=======
+<!-- Written by QtCreator 4.13.3, 2021-01-25T06:03:43. -->
+>>>>>>> 315c0ede09ab5c3bc693b3c32f1ce50a4218aaa5
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -62,10 +66,18 @@
  <data>
   <variable>ProjectExplorer.Project.Target.0</variable>
   <valuemap type="QVariantMap">
+<<<<<<< HEAD
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{3f589bfe-6049-4e71-a903-fe53e5ae1227}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
+=======
+   <value type="QString" key="DeviceType">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop (x86-darwin-generic-mach_o-64bit)</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop (x86-darwin-generic-mach_o-64bit)</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{bf5627ce-1994-44ee-aa92-190f4732e7c6}</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">1</value>
+>>>>>>> 315c0ede09ab5c3bc693b3c32f1ce50a4218aaa5
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
@@ -245,7 +257,11 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
+<<<<<<< HEAD
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">/users/students/r/w7/w7r92/of_v0.10.0_linux64gcc5_release/apps/myApps/PandaPunch/bin</value>
+=======
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/goldy/Dev/_Libraries/openframework/apps/myApps/PandaPunch/bin/PandaPunch.app/Contents/MacOS</value>
+>>>>>>> 315c0ede09ab5c3bc693b3c32f1ce50a4218aaa5
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
