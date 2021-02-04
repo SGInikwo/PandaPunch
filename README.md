@@ -13,3 +13,5 @@ In QTCReator go to the PandaPunch.qbs and change line 6 the import path to where
 Then under the QBS Files/Modules/ode ode.qbs file change the patch on line 4 where you have ode stored.
 
 When all of this is done you should be able to press the green play button and play the game.
+
+Repo: https://github.com/SGInikwo/PandaPunch
