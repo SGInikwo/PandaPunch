@@ -15,3 +15,5 @@ Then under the QBS Files/Modules/ode ode.qbs file change the patch on line 4 whe
 When all of this is done you should be able to press the green play button and play the game.
 
 Repo: https://github.com/SGInikwo/PandaPunch
+
+https://www.youtube.com/watch?v=KH33JgzdlkM
