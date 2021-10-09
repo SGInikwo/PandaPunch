@@ -16,4 +16,4 @@ When all of this is done you should be able to press the green play button and p
 
 Repo: https://github.com/SGInikwo/PandaPunch
 
-https://www.youtube.com/watch?v=KH33JgzdlkM
+Video: https://www.youtube.com/watch?v=KH33JgzdlkM
